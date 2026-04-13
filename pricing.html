@@ -1,0 +1,1297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing — Xenon Hub</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .page-hero {
+        padding: 140px 0 64px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+      }
+      .page-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 80% 40%,
+          rgba(212, 175, 55, 0.05) 0%,
+          transparent 55%
+        );
+        pointer-events: none;
+      }
+      .page-hero h1 {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(36px, 5vw, 62px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.02;
+        color: var(--text);
+        margin-bottom: 16px;
+      }
+      .page-hero h1 span {
+        color: var(--premium);
+      }
+      .page-hero p {
+        font-size: 15px;
+        color: var(--text-dim);
+        max-width: 460px;
+        line-height: 1.75;
+      }
+      .breadcrumb {
+        display: flex;
+        gap: 8px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        align-items: center;
+      }
+      .breadcrumb a {
+        color: var(--accent-light);
+        text-decoration: none;
+      }
+      .breadcrumb span {
+        opacity: 0.4;
+      }
+
+      .notice {
+        display: flex;
+        gap: 16px;
+        padding: 18px 24px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--accent);
+        border-radius: var(--radius-lg);
+        margin: 48px 0 0;
+        font-size: 13.5px;
+        color: var(--text-dim);
+        line-height: 1.7;
+      }
+      .notice-icon {
+        color: var(--accent-light);
+        flex-shrink: 0;
+        font-size: 15px;
+        margin-top: 1px;
+      }
+
+      .tier-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 40px 0;
+      }
+      .tier-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 40px;
+        position: relative;
+        transition: border-color 0.3s;
+      }
+      .tier-card.featured {
+        border-color: rgba(212, 175, 55, 0.25);
+      }
+      .tier-card.featured::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: var(--radius-lg);
+        background: radial-gradient(
+          ellipse at top right,
+          rgba(212, 175, 55, 0.06) 0%,
+          transparent 55%
+        );
+        pointer-events: none;
+      }
+      .tier-card.featured::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(212, 175, 55, 0.5),
+          transparent
+        );
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      }
+
+      .tier-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-radius: 2px;
+        margin-bottom: 22px;
+      }
+      .tier-badge.free {
+        color: var(--accent-light);
+        border: 1px solid rgba(168, 85, 247, 0.25);
+        background: var(--accent-glow2);
+      }
+      .tier-badge.prem {
+        color: var(--premium);
+        border: 1px solid rgba(212, 175, 55, 0.25);
+        background: var(--premium-glow);
+      }
+
+      .tier-name {
+        font-family: "Syne", sans-serif;
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+      }
+      .tier-price {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        margin-bottom: 22px;
+      }
+      .tier-price-num {
+        font-family: "Syne", sans-serif;
+        font-size: 44px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.03em;
+      }
+      .tier-price-num.gold {
+        color: var(--premium);
+      }
+      .tier-price-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .tier-desc {
+        font-size: 13.5px;
+        color: var(--text-dim);
+        line-height: 1.7;
+        margin-bottom: 28px;
+        min-height: 56px;
+      }
+      .tier-divider {
+        height: 1px;
+        background: var(--border);
+        margin-bottom: 24px;
+      }
+
+      .tier-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+        margin-bottom: 32px;
+      }
+      .tf {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        font-size: 13.5px;
+        color: var(--text-dim);
+      }
+      .tf-icon {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tf-icon.yes {
+        background: rgba(168, 85, 247, 0.15);
+      }
+      .tf-icon.yes::after {
+        content: "";
+        width: 8px;
+        height: 5px;
+        border-left: 1.5px solid var(--accent-light);
+        border-bottom: 1.5px solid var(--accent-light);
+        transform: rotate(-45deg) translateY(-1px);
+        display: block;
+      }
+      .tf-icon.gold {
+        background: rgba(212, 175, 55, 0.12);
+      }
+      .tf-icon.gold::after {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--premium);
+        clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        display: block;
+      }
+      .tf-icon.no {
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .tf-icon.no::after {
+        content: "";
+        width: 8px;
+        height: 1px;
+        background: var(--border2);
+        display: block;
+      }
+
+      .btn-free {
+        background: rgba(12, 9, 18, 0.8);
+        color: var(--text-dim);
+        border: 1px solid var(--border2);
+        width: 100%;
+        justify-content: center;
+        padding: 14px;
+        font-size: 12px;
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: 0.08em;
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+        border-radius: 0;
+      }
+      .btn-free:hover {
+        border-color: rgba(168, 85, 247, 0.5);
+        color: var(--accent-light);
+        box-shadow: 0 0 16px rgba(168, 85, 247, 0.12);
+        text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+      }
+
+      .btn-prem {
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.3));
+        color: var(--premium);
+        border: 1px solid rgba(212, 175, 55, 0.4);
+        width: 100%;
+        justify-content: center;
+        padding: 14px;
+        font-size: 12px;
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: 0.08em;
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+        border-radius: 0;
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.1), inset 0 1px 0 rgba(212, 175, 55, 0.1);
+      }
+      .btn-prem:hover {
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.25), 0 0 60px rgba(212, 175, 55, 0.08), inset 0 0 20px rgba(212, 175, 55, 0.06);
+        text-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+        border-color: rgba(212, 175, 55, 0.7);
+        transform: translateY(-1px);
+      }
+
+      .compare-section {
+        padding: 20px 0 80px;
+      }
+      .compare-title {
+        font-family: "Syne", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .compare-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13.5px;
+      }
+      .compare-table thead tr {
+        border-bottom: 1px solid var(--border);
+      }
+      .compare-table th {
+        padding: 14px 20px;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 13px;
+        text-align: left;
+        color: var(--text-muted);
+      }
+      .compare-table th:nth-child(2) {
+        color: var(--accent-light);
+        text-align: center;
+      }
+      .compare-table th:nth-child(3) {
+        color: var(--premium);
+        text-align: center;
+      }
+      .compare-table td {
+        padding: 12px 20px;
+        color: var(--text-dim);
+        border-bottom: 1px solid rgba(30, 22, 40, 0.7);
+      }
+      .compare-table td:nth-child(2),
+      .compare-table td:nth-child(3) {
+        text-align: center;
+      }
+      .compare-table tr:hover td {
+        background: var(--surface2);
+      }
+      .compare-table tr:last-child td {
+        border-bottom: none;
+      }
+      .cy {
+        color: var(--accent-light);
+        font-size: 15px;
+      }
+      .cg {
+        color: var(--premium);
+        font-size: 15px;
+      }
+      .cn {
+        color: var(--border2);
+        font-size: 15px;
+      }
+
+      .faq-section {
+        padding: 0 0 80px;
+      }
+      .faq-item {
+        border-bottom: 1px solid var(--border);
+      }
+      .faq-q {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 0;
+        font-family: "Syne", sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        background: none;
+        border: none;
+        cursor: none;
+        text-align: left;
+        gap: 20px;
+        transition: color 0.2s;
+      }
+      .faq-q:hover {
+        color: var(--accent-light);
+      }
+      .faq-icon {
+        width: 22px;
+        height: 22px;
+        border: 1px solid var(--border2);
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 16px;
+        color: var(--text-muted);
+        transition: all 0.2s;
+      }
+      .faq-item.open .faq-icon {
+        border-color: var(--accent);
+        color: var(--accent-light);
+      }
+      .faq-a {
+        font-size: 14px;
+        color: var(--text-dim);
+        line-height: 1.75;
+        padding-bottom: 20px;
+        display: none;
+        max-width: 680px;
+      }
+      .faq-item.open .faq-a {
+        display: block;
+      }
+
+      @media (max-width: 768px) {
+        .tier-grid {
+          grid-template-columns: 1fr;
+        }
+        .compare-table {
+          font-size: 12px;
+        }
+        .compare-table td,
+        .compare-table th {
+          padding: 10px 12px;
+        }
+      }
+
+      /* Pricing popup */
+      .popup-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(4, 2, 8, 0.85);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 200;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .popup-overlay.active {
+        display: flex;
+      }
+      .popup {
+        background: var(--surface);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-radius: var(--radius-lg);
+        max-width: 580px;
+        width: 100%;
+        max-height: 85vh;
+        overflow-y: auto;
+        position: relative;
+        animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      .popup::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(212, 175, 55, 0.5),
+          transparent
+        );
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      }
+      .popup-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 28px;
+        border-bottom: 1px solid var(--border);
+      }
+      .popup-header h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--premium);
+        letter-spacing: -0.02em;
+      }
+      .popup-close {
+        width: 28px;
+        height: 28px;
+        border: 1px solid var(--border2);
+        border-radius: 0;
+        background: rgba(12, 9, 18, 0.8);
+        color: var(--text-muted);
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: none;
+        transition: all 0.25s;
+        clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
+      }
+      .popup-close:hover {
+        border-color: var(--accent);
+        color: var(--accent-light);
+        text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+      }
+      .popup-body {
+        padding: 28px 32px;
+      }
+      .popup-section-label {
+        font-family: "Syne", sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .popup-section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+      .price-method {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 18px 16px;
+        border-radius: var(--radius);
+        margin-bottom: 8px;
+        background: rgba(255, 255, 255, 0.01);
+        border: 1px solid transparent;
+        transition: all 0.2s;
+      }
+      .price-method:hover {
+        background: var(--surface2);
+        border-color: var(--border);
+      }
+      .price-method:last-child {
+        border-bottom: none;
+      }
+      .pm-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        overflow: hidden;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+      }
+      .pm-icon img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+      .pm-icon .emoji {
+        font-size: 22px;
+        line-height: 1;
+      }
+      .pm-info {
+        flex: 1;
+      }
+      .pm-name {
+        font-family: "Syne", sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+      .pm-prices {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px 16px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        color: var(--text-dim);
+        line-height: 2;
+      }
+      .pm-prices strong {
+        color: var(--premium);
+        font-weight: 500;
+      }
+      .pm-prices .amt {
+        color: var(--text);
+      }
+      .popup-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 20px 0;
+      }
+      .popup-notes {
+        padding: 0 32px 28px;
+      }
+      .popup-notes-title {
+        font-family: "Syne", sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+      }
+      .popup-notes ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .popup-notes ul li {
+        font-size: 13px;
+        color: var(--text-dim);
+        padding-left: 16px;
+        position: relative;
+        line-height: 1.6;
+      }
+      .popup-notes ul li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--premium);
+      }
+      .popup-notes a {
+        color: var(--accent-light);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .popup-notes a:hover {
+        color: var(--text);
+      }
+      .btn-check-prices {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 24px;
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.1),
+          rgba(212, 175, 55, 0.04)
+        );
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 0;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--premium);
+        cursor: none;
+        transition: all 0.25s;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+        clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        text-transform: uppercase;
+      }
+      .btn-check-prices:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.18),
+          rgba(212, 175, 55, 0.08)
+        );
+        border-color: rgba(212, 175, 55, 0.5);
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+        transform: translateY(-1px);
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+      }
+      .btn-check-prices svg {
+        width: 14px;
+        height: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <nav>
+      <a href="index.html" class="nav-logo"
+        ><div class="logo-mark"></div>
+        Xenon Hub</a
+      >
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="pricing.html" class="active">Pricing</a></li>
+        <li><a href="keysystem.html">Key System</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="discord.html">Discord</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="docs.html" class="btn btn-ghost">Get Started</a>
+        <a href="discord.html" class="btn btn-primary">Join Discord</a>
+      </div>
+      <button class="nav-hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">home</a><span>/</span><span>pricing</span>
+        </div>
+        <h1>Simple,<br />honest <span>pricing.</span></h1>
+        <p>
+          Two tiers. Pay once for premium and it is yours permanently. Whitelist
+          goes through Discord. Or you could consider a cheaper monthly key.
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="notice animate-fade-up">
+        <span class="notice-icon">&#9432;</span>
+        <div>
+          Purchases are handled through the Discord server.
+          <a
+            href="discord.html"
+            style="
+              color: var(--accent-light);
+              text-decoration: none;
+              font-weight: 600;
+            "
+            >Join here</a
+          >
+          and your whitelist gets delivered automatically once payment is
+          confirmed.
+        </div>
+      </div>
+
+      <div class="tier-grid">
+        <div class="tier-card animate-fade-up">
+          <div class="tier-badge free">Free</div>
+          <div class="tier-name">Freemium</div>
+          <div class="tier-price">
+            <div class="tier-price-num">$0</div>
+            <div class="tier-price-label">forever</div>
+          </div>
+          <div class="tier-desc">
+            The core of the script is free. Auto block, lock on, most character
+            modules, combos, and ESP included without paying anything.
+          </div>
+          <div class="tier-divider"></div>
+          <ul class="tier-features">
+            <li class="tf">
+              <div class="tf-icon yes"></div>
+              Full auto block system
+            </li>
+            <li class="tf">
+              <div class="tf-icon yes"></div>
+              Lock on with prediction
+            </li>
+            <li class="tf">
+              <div class="tf-icon yes"></div>
+              Auto counter and punish
+            </li>
+            <li class="tf">
+              <div class="tf-icon yes"></div>
+              All character modules
+            </li>
+            <li class="tf">
+              <div class="tf-icon yes"></div>
+              Combo recorder
+            </li>
+            <li class="tf">
+              <div class="tf-icon yes"></div>
+              Full ESP suite
+            </li>
+            <li class="tf">
+              <div class="tf-icon yes"></div>
+              Fly and movement tools
+            </li>
+            <li class="tf">
+              <div class="tf-icon no"></div>
+              Legit black flash chain
+            </li>
+            <li class="tf">
+              <div class="tf-icon no"></div>
+              Always downslam
+            </li>
+            <li class="tf">
+              <div class="tf-icon no"></div>
+              Auto aim and hitbox extender
+            </li>
+            <li class="tf">
+              <div class="tf-icon no"></div>
+              Auto Higurama QTE
+            </li>
+            <li class="tf">
+              <div class="tf-icon no"></div>
+              Autofarm
+            </li>
+            <li class="tf">
+              <div class="tf-icon no"></div>
+              Invisible
+            </li>
+            <li class="tf">
+              <div class="tf-icon no"></div>
+              Custom teleport locations
+            </li>
+          </ul>
+          <a href="docs.html" class="btn btn-free">Start for free</a>
+        </div>
+
+        <div class="tier-card featured animate-fade-up delay-2">
+          <div class="tier-badge prem">Premium</div>
+          <div class="tier-name">Lifetime</div>
+          <div class="tier-price">
+            <button class="btn-check-prices" id="openPrices">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M2 4h12M2 8h8M2 12h10" />
+              </svg>
+              Check Prices
+            </button>
+          </div>
+          <div class="tier-desc">
+            One purchase. Everything unlocked. Or you can buy a cheaper monthly
+            key. Make sure you purchase from authorized sources.
+          </div>
+          <div class="tier-divider"></div>
+          <ul class="tier-features">
+            <li class="tf">
+              <div class="tf-icon yes"></div>
+              Everything in the free tier
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Legit black flash chain
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Always downslam and uppercut
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Auto aim abilities
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Hitbox extender
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Auto Higurama QTE and domain
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Full autofarm tab
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Invisible (two variants)
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Custom teleport locations
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              All future updates included
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Side dash assist
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              No dash cooldown
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Priority support
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Advanced scripts
+            </li>
+            <li class="tf">
+              <div class="tf-icon gold"></div>
+              Legit block break
+            </li>
+          </ul>
+          <a href="discord.html" class="btn btn-prem" id="purchaseBtn">
+            Purchase on Discord
+          </a>
+        </div>
+      </div>
+
+      <div class="compare-section animate-fade-up">
+        <div class="compare-title">Full comparison</div>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Free</th>
+              <th>Premium</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Auto block with multi hit hold</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Projectile blocking</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Anti fake melee filter</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Domain protection</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Lock on with prediction</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Auto counter</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Auto punish</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Combo recorder</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Full ESP suite</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>All character modules</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Fly and movement tools</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>No stun and no ragdoll</td>
+              <td><span class="cy">&#10003;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Legit black flash chain</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Always downslam or uppercut</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Auto aim abilities</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Hitbox extender</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Auto Higurama QTE</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Autofarm</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Invisible</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Custom teleport locations</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Side dash assist</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>No dash cooldown</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Advanced scripts</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Legit block break</td>
+              <td><span class="cn">&#8212;</span></td>
+              <td><span class="cg">&#10003;</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="more-features-cta animate-fade-up" style="text-align: center; padding: 12px 0 48px;">
+        <p style="
+          font-family: 'Syne', sans-serif;
+          font-size: 20px;
+          font-weight: 700;
+          color: var(--premium);
+          line-height: 1.6;
+          letter-spacing: 0.03em;
+        ">And far far more.</p>
+      </div>
+
+      <div class="faq-section animate-fade-up">
+        <div class="compare-title">Questions</div>
+        <div class="faq-item">
+          <button class="faq-q">
+            How does the whitelist work?<span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Once your payment goes through on Discord, the bot handles
+            everything automatically. You just need to wait till whitelisted,
+            timings depend on your payment method
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">
+            Which executor should I use?<span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Potassium is the recommended choice and gets you everything.
+            Astroid, Velocity and Delta also work well for most features. Some
+            of the more advanced hooks need functions that only certain
+            executors support, so if something does not work it is usually worth
+            switching to Potassium first.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">
+            Does premium include future updates?<span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Yes. Pay once and every update after that is included automatically.
+            No extra charges, no tiers within premium, just everything whenever
+            it updates.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">
+            What happens after a JJS update?<span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            The script gets patched as fast as possible. The loader always pulls
+            the latest version so you just re execute and you are on the newest
+            build automatically.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">
+            Are refunds available?<span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            All sales are final once the whitelist is delivered. If you have
+            concerns before buying, reach out on Discord and we can answer any
+            questions first.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container">
+        <div class="footer-inner">
+          <a href="index.html" class="nav-logo"
+            ><div class="logo-mark" style="width: 18px; height: 18px"></div>
+            Xenon Hub</a
+          >
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="keysystem.html">Key System</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="discord.html">Discord</a></li>
+          </ul>
+          <div class="footer-copy">xenon hub // pricing</div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Pricing Popup -->
+    <div class="popup-overlay" id="pricePopup">
+      <div class="popup">
+        <div class="popup-header">
+          <h3>Payment Methods</h3>
+          <button class="popup-close" id="closePopup">&times;</button>
+        </div>
+        <div class="popup-body">
+          <div class="popup-section-label">Current Methods</div>
+
+          <div class="price-method">
+            <div class="pm-icon"><img src="paypal.png" alt="PayPal" /></div>
+            <div class="pm-info">
+              <div class="pm-name">PayPal</div>
+              <div class="pm-prices">
+                <span class="amt">£4.99 / $6.80</span> — <strong>1 Month</strong
+                ><br />
+                <span class="amt">£15 / $20.50</span> —
+                <strong>Lifetime</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="price-method">
+            <div class="pm-icon"><span class="emoji">💳</span></div>
+            <div class="pm-info">
+              <div class="pm-name">Card</div>
+              <div class="pm-prices">
+                <span class="amt">£4.99 / $6.80</span> — <strong>1 Month</strong
+                ><br />
+                <span class="amt">£15 / $20.50</span> —
+                <strong>Lifetime</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="popup-divider"></div>
+          <div class="popup-section-label">Temporary Methods</div>
+
+          <div class="price-method">
+            <div class="pm-icon"><img src="executor.png" alt="Executor" /></div>
+            <div class="pm-info">
+              <div class="pm-name">Executor Key</div>
+              <div class="pm-prices">
+                Will be discussed inside the ticket — <strong>depends</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="price-method">
+            <div class="pm-icon"><img src="nitro.png" alt="Nitro" /></div>
+            <div class="pm-info">
+              <div class="pm-name">Nitro (not Basic)</div>
+              <div class="pm-prices">
+                1 Month Nitro — <strong>1.5 Months</strong><br />
+                1 Year Nitro — <strong>Lifetime</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="price-method">
+            <div class="pm-icon"><img src="boost.png" alt="Boost" /></div>
+            <div class="pm-info">
+              <div class="pm-name">Server Boosts</div>
+              <div class="pm-prices">
+                1 Boost = <strong>1 Week</strong> (stackable up to 4
+                boosts/month)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="popup-notes">
+          <div class="popup-notes-title">Notes</div>
+          <ul>
+            <li>
+              Check
+              <a
+                href="https://discord.com/channels/1274036834787131432/1482102922564075562"
+                target="_blank"
+                rel="noopener"
+                >FAQ</a
+              >
+              before purchasing
+            </li>
+            <li>
+              For card payment →
+              <a
+                href="https://revolut.me/jay0lypl"
+                target="_blank"
+                rel="noopener"
+                >click here</a
+              >
+            </li>
+            <li>Make a ticket on Discord to become a reseller</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Mobile hamburger menu toggle
+      document.querySelector('.nav-hamburger').addEventListener('click', function() {
+        this.closest('nav').classList.toggle('nav-open');
+      });
+      document.querySelectorAll('.nav-links a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          document.querySelector('nav').classList.remove('nav-open');
+        });
+      });
+
+      const cursor = document.getElementById("cursor");
+      const ring = document.getElementById("cursorRing");
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+      });
+      (function loop() {
+        cursor.style.left = mx + "px";
+        cursor.style.top = my + "px";
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+        requestAnimationFrame(loop);
+      })();
+
+      // Price popup
+      document.getElementById("openPrices").addEventListener("click", () => {
+        document.getElementById("pricePopup").classList.add("active");
+      });
+      document.getElementById("closePopup").addEventListener("click", () => {
+        document.getElementById("pricePopup").classList.remove("active");
+      });
+      document.getElementById("pricePopup").addEventListener("click", (e) => {
+        if (e.target === e.currentTarget) {
+          e.currentTarget.classList.remove("active");
+        }
+      });
+
+      document.querySelectorAll(".faq-q").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const item = this.closest(".faq-item");
+          const isOpen = item.classList.contains("open");
+          document.querySelectorAll(".faq-item").forEach((i) => {
+            i.classList.remove("open");
+            i.querySelector(".faq-icon").textContent = "+";
+          });
+          if (!isOpen) {
+            item.classList.add("open");
+            this.querySelector(".faq-icon").textContent = "\u2212";
+          }
+        });
+      });
+
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.style.opacity = "1";
+              e.target.style.transform = "translateY(0)";
+            }
+          });
+        },
+        { threshold: 0.08 },
+      );
+      document.querySelectorAll(".animate-fade-up").forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(16px)";
+        el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        obs.observe(el);
+      });
+    </script>
+  </body>
+</html>
