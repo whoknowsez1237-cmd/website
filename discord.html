@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discord — Xenon Hub</title>
+    <link rel="icon" type="image/png" href="logo2.png" />
+    <meta
+      name="description"
+      content="Join the Xenon Hub Discord server for script support, premium purchases, giveaways, update announcements, and more."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .page-hero {
+        padding: 140px 0 64px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+      }
+      .page-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 40% 50%,
+          rgba(88, 101, 242, 0.08) 0%,
+          transparent 55%
+        );
+        pointer-events: none;
+      }
+      .page-hero h1 {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(36px, 5vw, 62px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.02;
+        color: var(--text);
+        margin-bottom: 16px;
+      }
+      .page-hero h1 span {
+        color: #7289da;
+      }
+      .page-hero p {
+        font-size: 15px;
+        color: var(--text-dim);
+        max-width: 520px;
+        line-height: 1.75;
+      }
+      .breadcrumb {
+        display: flex;
+        gap: 8px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        align-items: center;
+      }
+      .breadcrumb a {
+        color: var(--accent-light);
+        text-decoration: none;
+      }
+      .breadcrumb span {
+        opacity: 0.4;
+      }
+
+      /* Server card */
+      .server-card {
+        margin-top: 48px;
+        background: var(--surface);
+        border: 1px solid rgba(88, 101, 242, 0.2);
+        border-radius: var(--radius-lg);
+        padding: 44px;
+        position: relative;
+        overflow: hidden;
+      }
+      .server-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at top left,
+          rgba(88, 101, 242, 0.06) 0%,
+          transparent 55%
+        );
+        pointer-events: none;
+      }
+      .server-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(88, 101, 242, 0.5),
+          transparent
+        );
+      }
+
+      .server-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 32px;
+        position: relative;
+      }
+      .server-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #5865f2, #4752c4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 4px 20px rgba(88, 101, 242, 0.3);
+      }
+      .server-icon svg {
+        width: 32px;
+        height: 32px;
+        color: #fff;
+      }
+      .server-info h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        margin-bottom: 4px;
+      }
+      .server-link {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        color: #7289da;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .server-link:hover {
+        color: #99aeff;
+      }
+
+      /* Stats row */
+      .server-stats {
+        display: flex;
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin-bottom: 32px;
+        position: relative;
+      }
+      .stat-card {
+        flex: 1;
+        background: var(--surface);
+        padding: 24px 28px;
+        text-align: center;
+        transition: background 0.2s;
+      }
+      .stat-card:hover {
+        background: var(--surface2);
+      }
+      .stat-num {
+        font-family: "Syne", sans-serif;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+      .stat-num.loading {
+        font-size: 16px;
+        color: var(--text-muted);
+        animation: pulse 1.5s infinite;
+      }
+      .stat-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--text-muted);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .stat-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 6px;
+      }
+      .stat-dot.total {
+        background: #5865f2;
+        box-shadow: 0 0 8px rgba(88, 101, 242, 0.5);
+      }
+      .stat-dot.online {
+        background: #23a55a;
+        box-shadow: 0 0 8px rgba(35, 165, 90, 0.5);
+        animation: pulse 2s infinite;
+      }
+
+      /* Join button */
+      .join-btn-wrap {
+        position: relative;
+      }
+      .btn-discord {
+        background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(71, 82, 196, 0.35));
+        color: #99aeff;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 15px 36px;
+        border: 1px solid rgba(88, 101, 242, 0.4);
+        border-radius: 0;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        cursor: none;
+        transition: all 0.25s;
+        position: relative;
+        overflow: hidden;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+        box-shadow: 0 0 20px rgba(88, 101, 242, 0.12), inset 0 1px 0 rgba(88, 101, 242, 0.12);
+      }
+      .btn-discord::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.015) 2px,
+          rgba(255, 255, 255, 0.015) 4px
+        );
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .btn-discord:hover::before {
+        opacity: 1;
+      }
+      .btn-discord:hover {
+        box-shadow: 0 0 30px rgba(88, 101, 242, 0.35), 0 0 60px rgba(88, 101, 242, 0.1), inset 0 0 20px rgba(88, 101, 242, 0.06);
+        transform: translateY(-1px);
+        text-shadow: 0 0 12px rgba(88, 101, 242, 0.5);
+        border-color: rgba(88, 101, 242, 0.7);
+      }
+      .btn-discord svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      /* Reasons sections */
+      .reasons-section {
+        margin-top: 64px;
+      }
+      .reasons-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .reasons-label h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+      .reasons-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+      .reasons-badge {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+      .reasons-badge.general {
+        color: #5865f2;
+        border: 1px solid rgba(88, 101, 242, 0.25);
+        background: rgba(88, 101, 242, 0.06);
+      }
+      .reasons-badge.special {
+        color: var(--premium);
+        border: 1px solid rgba(212, 175, 55, 0.25);
+        background: var(--premium-glow);
+      }
+
+      .reasons-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      .reason-card {
+        background: var(--surface);
+        padding: 28px 24px;
+        transition: background 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .reason-card:hover {
+        background: var(--surface2);
+      }
+      .reason-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(88, 101, 242, 0.04),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .reason-card:hover::before {
+        opacity: 1;
+      }
+      .reason-card.gold::before {
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.04),
+          transparent
+        );
+      }
+      .reason-icon {
+        font-size: 22px;
+        margin-bottom: 14px;
+        display: block;
+        filter: drop-shadow(0 0 6px rgba(88, 101, 242, 0.3));
+      }
+      .reason-card.gold .reason-icon {
+        filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.3));
+      }
+      .reason-card h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 8px;
+        letter-spacing: -0.01em;
+      }
+      .reason-card p {
+        font-size: 13px;
+        color: var(--text-dim);
+        line-height: 1.65;
+      }
+
+      .spacer {
+        height: 60px;
+      }
+
+      @media (max-width: 800px) {
+        .server-stats {
+          flex-direction: column;
+        }
+        .reasons-grid {
+          grid-template-columns: 1fr;
+        }
+        .server-card {
+          padding: 28px;
+        }
+        .server-header {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <nav>
+      <a href="index.html" class="nav-logo"
+        ><div class="logo-mark"></div>
+        Xenon Hub</a
+      >
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="keysystem.html">Key System</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="discord.html" class="active">Discord</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="docs.html" class="btn btn-ghost">Get Started</a>
+        <a href="pricing.html" class="btn btn-primary">Purchase</a>
+      </div>
+      <button class="nav-hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">home</a><span>/</span><span>discord</span>
+        </div>
+        <h1>Join the<br /><span>community.</span></h1>
+        <p>
+          The Xenon Hub Discord server is where everything happens. Get script
+          support, purchase premium, participate in giveaways, and stay ahead
+          with the fastest update announcements.
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Server Card -->
+      <div class="server-card animate-fade-up">
+        <div class="server-header">
+          <div class="server-icon" style="overflow: hidden;">
+            <img src="logo.png" alt="Server Logo" style="width: 100%; height: 100%; object-fit: cover;" />
+          </div>
+          <div class="server-info">
+            <h2>Xenon Scripts</h2>
+            <a
+              href="https://discord.gg/xenonscripts"
+              target="_blank"
+              rel="noopener"
+              class="server-link"
+              id="server-url"
+              >discord.gg/xenonscripts</a
+            >
+          </div>
+        </div>
+
+        <!-- Live stats -->
+        <div class="server-stats">
+          <div class="stat-card">
+            <div class="stat-num loading" id="totalMembers">loading...</div>
+            <div class="stat-label">
+              <span class="stat-dot total"></span>Total Members
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num loading" id="onlineMembers">loading...</div>
+            <div class="stat-label">
+              <span class="stat-dot online"></span>Online Now
+            </div>
+          </div>
+        </div>
+
+        <div class="join-btn-wrap">
+          <a
+            href="https://discord.gg/xenonscripts"
+            target="_blank"
+            rel="noopener"
+            class="btn-discord"
+            id="join-btn"
+          >
+            <svg viewBox="0 0 16 16" fill="currentColor">
+              <path
+                d="M13.5 3.2A12.4 12.4 0 0 0 10.3 2a9 9 0 0 0-.4.8 11.5 11.5 0 0 0-3.8 0A9 9 0 0 0 5.7 2 12.4 12.4 0 0 0 2.5 3.2 13.6 13.6 0 0 0 .2 12.6a12.5 12.5 0 0 0 3.8 2 9.5 9.5 0 0 0 .8-1.3 7.8 7.8 0 0 1-1.3-.6l.3-.3a8.9 8.9 0 0 0 7.6 0l.3.3a8 8 0 0 1-1.3.6 9.5 9.5 0 0 0 .8 1.3 12.5 12.5 0 0 0 3.8-2A13.5 13.5 0 0 0 13.5 3.2ZM5.4 10.7a1.5 1.5 0 0 1-1.4-1.6 1.5 1.5 0 0 1 1.4-1.5 1.5 1.5 0 0 1 1.4 1.5 1.5 1.5 0 0 1-1.4 1.6Zm5.2 0a1.5 1.5 0 0 1-1.4-1.6 1.5 1.5 0 0 1 1.4-1.5 1.5 1.5 0 0 1 1.4 1.5 1.5 1.5 0 0 1-1.4 1.6Z"
+              />
+            </svg>
+            Join Server
+          </a>
+        </div>
+      </div>
+
+      <!-- General Purpose Reasons -->
+      <div class="reasons-section animate-fade-up">
+        <div class="reasons-label">
+          <span class="reasons-badge general">General</span>
+          <h2>Why you should join</h2>
+        </div>
+
+        <div class="reasons-grid">
+          <div class="reason-card">
+            <span class="reason-icon">💬</span>
+            <h3>Script Support</h3>
+            <p>
+              Get help with setup, configuration, executor issues, and anything
+              else related to Xenon Hub directly from the community.
+            </p>
+          </div>
+          <div class="reason-card">
+            <span class="reason-icon">👑</span>
+            <h3>Premium Purchase</h3>
+            <p>
+              All premium purchases are handled through Discord. Create ticket,
+              pay, and your whitelist is delivered within minutes.
+            </p>
+          </div>
+          <div class="reason-card">
+            <span class="reason-icon">🎉</span>
+            <h3>Giveaways</h3>
+            <p>
+              Regular giveaways for premium access, scripts, and other rewards.
+              You have to be in the server to participate.
+            </p>
+          </div>
+          <div class="reason-card">
+            <span class="reason-icon">⚡</span>
+            <h3>Fastest Update Info</h3>
+            <p>
+              Be the first to know when a new version drops, what changed, and
+              what is coming next. Changelogs post here first.
+            </p>
+          </div>
+          <div class="reason-card">
+            <span class="reason-icon">💡</span>
+            <h3>Suggestions</h3>
+            <p>
+              Have an idea for a new feature or improvement? Post it in
+              suggestions and it could make it into the next update.
+            </p>
+          </div>
+          <div class="reason-card">
+            <span class="reason-icon">🐛</span>
+            <h3>Bug Reports</h3>
+            <p>
+              Found something broken? Report it directly so it gets fixed fast.
+              Bug reporters help keep the script running clean.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Special Purpose Reasons -->
+      <div class="reasons-section animate-fade-up" style="margin-top: 48px">
+        <div class="reasons-label">
+          <span class="reasons-badge special">Special</span>
+          <h2>Opportunities</h2>
+        </div>
+
+        <div class="reasons-grid">
+          <div class="reason-card gold">
+            <span class="reason-icon">🎬</span>
+            <h3>Content Creator</h3>
+            <p>
+              Apply as a content creator to get featured, receive perks, and
+              collaborate with Xenon Hub to grow your audience.
+            </p>
+          </div>
+          <div class="reason-card gold">
+            <span class="reason-icon">🤝</span>
+            <h3>Partnerships</h3>
+            <p>
+              Interested in partnering with Xenon? Reach out through Discord to
+              discuss collaboration and cross-promotion.
+            </p>
+          </div>
+          <div class="reason-card gold">
+            <span class="reason-icon">💰</span>
+            <h3>Become a Reseller</h3>
+            <p>
+              Apply to become an authorized reseller. Sell Xenon Hub premium to
+              your community and earn from every sale.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+    </div>
+
+    <footer>
+      <div class="container">
+        <div class="footer-inner">
+          <a href="index.html" class="nav-logo"
+            ><div class="logo-mark" style="width: 18px; height: 18px"></div>
+            Xenon Hub</a
+          >
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="keysystem.html">Key System</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="discord.html">Discord</a></li>
+          </ul>
+          <div class="footer-copy">xenon hub // discord</div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile hamburger menu toggle
+      document.querySelector('.nav-hamburger').addEventListener('click', function() {
+        this.closest('nav').classList.toggle('nav-open');
+      });
+      document.querySelectorAll('.nav-links a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          document.querySelector('nav').classList.remove('nav-open');
+        });
+      });
+
+      // Custom cursor
+      const cursor = document.getElementById("cursor");
+      const ring = document.getElementById("cursorRing");
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+      });
+      (function loop() {
+        cursor.style.left = mx + "px";
+        cursor.style.top = my + "px";
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+        requestAnimationFrame(loop);
+      })();
+
+      // Fetch live Discord stats
+      async function fetchDiscordStats() {
+        try {
+          const res = await fetch(
+            "https://discord.com/api/v9/invites/xenonscripts?with_counts=true",
+          );
+          const data = await res.json();
+
+          const totalEl = document.getElementById("totalMembers");
+          const onlineEl = document.getElementById("onlineMembers");
+
+          if (data.approximate_member_count) {
+            totalEl.textContent =
+              data.approximate_member_count.toLocaleString();
+            totalEl.classList.remove("loading");
+          }
+          if (data.approximate_presence_count) {
+            onlineEl.textContent =
+              data.approximate_presence_count.toLocaleString();
+            onlineEl.classList.remove("loading");
+          }
+        } catch (err) {
+          document.getElementById("totalMembers").textContent = "—";
+          document.getElementById("onlineMembers").textContent = "—";
+          document.getElementById("totalMembers").classList.remove("loading");
+          document.getElementById("onlineMembers").classList.remove("loading");
+        }
+      }
+      fetchDiscordStats();
+
+      // Scroll animations
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.style.opacity = "1";
+              e.target.style.transform = "translateY(0)";
+            }
+          });
+        },
+        { threshold: 0.05 },
+      );
+      document.querySelectorAll(".animate-fade-up").forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(16px)";
+        el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        obs.observe(el);
+      });
+    </script>
+  </body>
+</html>

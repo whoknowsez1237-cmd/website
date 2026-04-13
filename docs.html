@@ -1,0 +1,1288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Docs — Xenon Hub</title>
+    <link rel="icon" type="image/png" href="logo2.png" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .docs-layout {
+        display: grid;
+        grid-template-columns: 230px 1fr;
+        min-height: calc(100vh - 64px);
+        margin-top: 64px;
+        align-items: start;
+      }
+      .docs-sidebar {
+        position: sticky;
+        top: 64px;
+        height: calc(100vh - 64px);
+        overflow-y: auto;
+        border-right: 1px solid var(--border);
+        padding: 32px 0;
+      }
+      .sb-section {
+        margin-bottom: 24px;
+      }
+      .sb-label {
+        padding: 0 22px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+      }
+      .sb-link {
+        display: block;
+        padding: 7px 22px;
+        font-size: 13px;
+        color: var(--text-dim);
+        text-decoration: none;
+        transition:
+          color 0.2s,
+          background 0.2s;
+        border-left: 2px solid transparent;
+      }
+      .sb-link:hover {
+        color: var(--text);
+        background: rgba(168, 85, 247, 0.05);
+      }
+      .sb-link.active {
+        color: var(--accent-light);
+        border-left-color: var(--accent);
+        background: var(--accent-glow2);
+      }
+
+      .docs-content {
+        padding: 52px 68px;
+        max-width: 840px;
+        margin: 0 auto;
+      }
+      .docs-content h1 {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(28px, 4vw, 42px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        margin-bottom: 14px;
+        line-height: 1.08;
+      }
+      .docs-content h1 span {
+        color: var(--accent-light);
+      }
+      .docs-content > p {
+        font-size: 15px;
+        color: var(--text-dim);
+        line-height: 1.8;
+        margin-bottom: 44px;
+        max-width: 600px;
+      }
+
+      .doc-sec {
+        padding: 52px 0;
+        border-top: 1px solid var(--border);
+      }
+      .doc-sec:first-of-type {
+        border-top: none;
+        padding-top: 0;
+      }
+      .doc-sec h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 14px;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .doc-sec h2 .anchor {
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 400;
+        font-family: "JetBrains Mono", monospace;
+      }
+      .doc-sec h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text);
+        margin: 30px 0 10px;
+      }
+      .doc-sec p {
+        font-size: 14px;
+        color: var(--text-dim);
+        line-height: 1.8;
+        margin-bottom: 16px;
+      }
+      .doc-sec ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        margin-bottom: 16px;
+      }
+      .doc-sec ul li {
+        font-size: 14px;
+        color: var(--text-dim);
+        padding-left: 20px;
+        position: relative;
+        line-height: 1.65;
+      }
+      .doc-sec ul li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 8px;
+        width: 5px;
+        height: 5px;
+        background: var(--border2);
+        clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      }
+      .doc-sec ul li strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--accent-light);
+        background: var(--accent-glow2);
+        border: 1px solid rgba(168, 85, 247, 0.12);
+        padding: 2px 7px;
+        border-radius: 2px;
+      }
+
+      .code-block {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin: 16px 0 24px;
+      }
+      .code-header {
+        padding: 11px 18px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface2);
+      }
+      .code-dots {
+        display: flex;
+        gap: 7px;
+      }
+      .code-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .code-dot:nth-child(1) {
+        background: #e05050;
+      }
+      .code-dot:nth-child(2) {
+        background: #f59e0b;
+      }
+      .code-dot:nth-child(3) {
+        background: var(--accent);
+      }
+      .code-filename {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .copy-btn {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--text-muted);
+        background: rgba(12, 9, 18, 0.8);
+        border: 1px solid var(--border);
+        padding: 3px 12px;
+        border-radius: 0;
+        cursor: none;
+        transition: all 0.25s;
+        clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
+        letter-spacing: 0.04em;
+      }
+      .copy-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent-light);
+        text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.1);
+      }
+      .code-body {
+        padding: 22px 26px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        line-height: 1.9;
+        color: var(--text-dim);
+        overflow-x: auto;
+      }
+      .code-body .cm {
+        color: var(--text-muted);
+        font-style: italic;
+      }
+      .code-body .fn {
+        color: var(--accent-light);
+      }
+      .code-body .st {
+        color: #fde68a;
+      }
+
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin: 20px 0;
+      }
+      .step {
+        display: flex;
+        gap: 20px;
+        padding: 22px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .step:last-child {
+        border-bottom: none;
+      }
+      .step-num {
+        width: 28px;
+        height: 28px;
+        background: var(--surface2);
+        border: 1px solid rgba(168, 85, 247, 0.25);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Syne", sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--accent-light);
+        flex-shrink: 0;
+      }
+      .step-body h4 {
+        font-family: "Syne", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+      .step-body p {
+        font-size: 13.5px;
+        color: var(--text-dim);
+        line-height: 1.65;
+        margin: 0;
+      }
+
+      .callout {
+        display: flex;
+        gap: 14px;
+        padding: 18px 22px;
+        border-radius: var(--radius-lg);
+        margin: 20px 0;
+        font-size: 13.5px;
+        line-height: 1.7;
+      }
+      .callout.info {
+        background: rgba(168, 85, 247, 0.05);
+        border: 1px solid rgba(168, 85, 247, 0.18);
+        color: var(--text-dim);
+      }
+      .callout.warn {
+        background: rgba(245, 158, 11, 0.05);
+        border: 1px solid rgba(245, 158, 11, 0.18);
+        color: var(--text-dim);
+      }
+      .callout-icon {
+        flex-shrink: 0;
+        margin-top: 1px;
+        font-size: 14px;
+      }
+      .callout.info .callout-icon {
+        color: var(--accent-light);
+      }
+      .callout.warn .callout-icon {
+        color: #f59e0b;
+      }
+
+      .opts-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin: 14px 0 22px;
+      }
+      .opts-table th {
+        text-align: left;
+        padding: 10px 16px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--border);
+      }
+      .opts-table td {
+        padding: 10px 16px;
+        color: var(--text-dim);
+        border-bottom: 1px solid rgba(30, 22, 40, 0.6);
+        vertical-align: top;
+      }
+      .opts-table td:first-child {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--accent-light);
+        white-space: nowrap;
+      }
+      .opts-table td:last-child {
+        color: var(--text-muted);
+        font-size: 12px;
+      }
+      .opts-table tr:last-child td {
+        border-bottom: none;
+      }
+      .opts-table tr:hover td {
+        background: var(--surface2);
+      }
+
+      @media (max-width: 900px) {
+        .docs-layout {
+          grid-template-columns: 1fr;
+        }
+        .docs-sidebar {
+          display: none;
+        }
+        .docs-content {
+          padding: 32px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <nav>
+      <a href="index.html" class="nav-logo"
+        ><div class="logo-mark"></div>
+        Xenon Hub</a
+      >
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="keysystem.html">Key System</a></li>
+        <li><a href="docs.html" class="active">Docs</a></li>
+        <li><a href="discord.html">Discord</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="pricing.html" class="btn btn-ghost">Pricing</a>
+        <a href="pricing.html" class="btn btn-primary">Get Premium</a>
+      </div>
+      <button class="nav-hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="docs-layout">
+      <aside class="docs-sidebar">
+        <div class="sb-section">
+          <div class="sb-label">Getting Started</div>
+          <a href="#setup" class="sb-link active">Installation</a>
+          <a href="#executors" class="sb-link">Executors</a>
+          <a href="#first-run" class="sb-link">First run</a>
+        </div>
+        <div class="sb-section">
+          <div class="sb-label">Features</div>
+          <a href="#autoblock" class="sb-link">Auto Block</a>
+          <a href="#lockon" class="sb-link">Lock On</a>
+          <a href="#bfchain" class="sb-link">BF Chain</a>
+          <a href="#combos" class="sb-link">Combos</a>
+          <a href="#adv-script" class="sb-link">Advanced Scripts</a>
+        </div>
+        <div class="sb-section">
+          <div class="sb-label">Other</div>
+          <a href="#mobile" class="sb-link">Mobile setup</a>
+          <a href="#config" class="sb-link">Config files</a>
+          <a href="#troubleshoot" class="sb-link">Troubleshooting</a>
+        </div>
+      </aside>
+
+      <div class="docs-content">
+        <div class="tag" style="margin-bottom: 20px">Documentation</div>
+        <h1>Get up and<br /><span>running fast.</span></h1>
+        <p>
+          Everything you need to know to load Xenon Hub and get the most out of
+          it. Start here if it is your first time, or jump to a specific section
+          if you are looking for something particular.
+        </p>
+
+        <div class="doc-sec" id="setup">
+          <h2>Installation <span class="anchor">#setup</span></h2>
+          <p>
+            Xenon Hub runs entirely through your executor. Paste the loader
+            below into the console after joining a Jujutsu Shenanigans server
+            and run it. That is all there is to it.
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot"></div>
+                <div class="code-dot"></div>
+                <div class="code-dot"></div>
+              </div>
+              <div class="code-filename">executor console</div>
+              <button class="copy-btn" id="copyLoader">copy</button>
+            </div>
+            <div class="code-body">
+              <span class="cm">-- paste this into your executor and run it</span
+              ><br />
+              <span class="fn">loadstring</span>(<span class="fn">game</span
+              >:<span class="fn">HttpGet</span>(<span class="st"
+                >"https://api.luarmor.net/files/v3/loaders/eed1b8c86a83b71bf7e8ec398fc39401.lua"</span
+              >))()
+            </div>
+          </div>
+
+          <div class="callout info">
+            <span class="callout-icon">&#9432;</span>
+            <div>
+              The script checks your whitelist status automatically. Free
+              features work for everyone with no whitelist needed. Premium
+              features unlock if your account is on the list.
+            </div>
+          </div>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h4>Join the game</h4>
+                <p>
+                  Open Roblox and get into a Jujutsu Shenanigans server. Wait
+                  for it to fully load before you do anything else.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h4>Attach your executor</h4>
+                <p>
+                  Open your executor and attach it to Roblox. Wave is the most
+                  compatible option but others work too.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h4>Run the loader</h4>
+                <p>
+                  Paste the script above into the console and hit execute. The
+                  UI opens automatically on the Auto Block tab.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <h4>Save your settings</h4>
+                <p>
+                  Go to UI Settings and use the SaveManager section to save your
+                  config. It loads automatically next time.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-sec" id="executors">
+          <h2>Executors <span class="anchor">#executors</span></h2>
+          <p>
+            Most features work on any UNC compliant executor. A small number of
+            the more advanced features need specific functions that not every
+            executor provides.
+          </p>
+
+          <table class="opts-table">
+            <thead>
+              <tr>
+                <th>Executor</th>
+                <th>Compatibility</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Potassium</td>
+                <td>Full support, recommended (paid)</td>
+              </tr>
+              <tr>
+                <td>Velocity</td>
+                <td>Full support, recommended (free)</td>
+              </tr>
+              <tr>
+                <td>Astroid</td>
+                <td>Full Support (New executor)</td>
+              </tr>
+              <tr>
+                <td>Delta</td>
+                <td>Full Support, recommended (Mobile)</td>
+              </tr>
+              <tr>
+                <td>Others</td>
+                <td>Works if UNC compliant, some features may be limited</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            When the script loads it checks what your executor supports and
+            shows a notification if anything is missing. Features that need
+            those functions get quietly disabled rather than breaking everything
+            else.
+          </p>
+        </div>
+
+        <div class="doc-sec" id="first-run">
+          <h2>First run <span class="anchor">#first-run</span></h2>
+          <p>
+            After executing you will see the Obsidian UI. Press
+            <code>Y</code> by default to open and close it. You can change this
+            keybind in the UI Settings tab.
+          </p>
+
+          <h3>Suggested starting setup</h3>
+          <ul>
+            <li>
+              <strong>Auto Block tab:</strong> Enable auto block and set the
+              distance to around 30. Enable auto punish underneath it.
+            </li>
+            <li>
+              <strong>Misc tab:</strong> Enable lock on. Camera mode is the
+              default and works well to start with. Turn on Show Locked Target
+              so you can always see who you are tracking.
+            </li>
+            <li>
+              <strong>Character Combat tab:</strong> Open this and enable
+              anything relevant to whichever character you play.
+            </li>
+            <li>
+              <strong>UI Settings tab:</strong> Save your config at the bottom
+              so settings come back automatically next time.
+            </li>
+          </ul>
+        </div>
+
+        <div class="doc-sec" id="autoblock">
+          <h2>Auto Block <span class="anchor">#autoblock</span></h2>
+          <p>
+            Auto block watches every character in the game and blocks incoming
+            attacks for you based on what animations they are playing. It
+            handles a wide range of situations including multi hit combos,
+            grabs, projectiles, and domain exposure.
+          </p>
+
+          <h3>Key settings</h3>
+          <table class="opts-table">
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>What it does</th>
+                <th>Default</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Max Distance</td>
+                <td>How far away enemies trigger a block</td>
+                <td>30 studs</td>
+              </tr>
+              <tr>
+                <td>Chase Distance</td>
+                <td>Distance limit for dash and chase animations</td>
+                <td>50 studs</td>
+              </tr>
+              <tr>
+                <td>Anti Fake Dist</td>
+                <td>Max reach for melee validation checks</td>
+                <td>16 studs</td>
+              </tr>
+              <tr>
+                <td>Facing Angle</td>
+                <td>How directly the enemy must face you for melee to count</td>
+                <td>100 degrees</td>
+              </tr>
+              <tr>
+                <td>Hold After Hit</td>
+                <td>Seconds to stay blocking after getting hit</td>
+                <td>0.3 seconds</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout warn">
+            <span class="callout-icon">&#9888;</span>
+            <div>
+              Locked Target Only mode restricts auto block to your current lock
+              target only. Everything else gets ignored. Useful in group fights
+              where you want control over what you react to.
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-sec" id="lockon">
+          <h2>Lock On <span class="anchor">#lockon</span></h2>
+          <p>
+            Lock on keeps you facing your target automatically. It runs every
+            frame so it stays accurate even through dashes and fast movement.
+            Prediction is optional but makes a noticeable difference if you turn
+            it on.
+          </p>
+
+          <h3>Lock methods</h3>
+          <ul>
+            <li>
+              <strong>Camera:</strong> Rotates your camera to face the target
+              each frame. Most subtle option.
+            </li>
+            <li>
+              <strong>Character:</strong> Makes your character physically face
+              the target. More aggressive but ensures your attacks actually
+              connect.
+            </li>
+            <li>
+              <strong>TBO/JJS Lock On:</strong> Uses the game's own built in
+              lock on system. Requires Wave or an executor that can hook into
+              PlayerScripts.
+            </li>
+          </ul>
+
+          <p>
+            You can combine multiple methods at once using the extra methods
+            dropdown. Most people run Camera plus Character together.
+          </p>
+
+          <h3>Target filter</h3>
+          <p>
+            The Lock Target Filter section in the Misc tab lets you build a
+            whitelist or blacklist of players. Whitelist mode means only listed
+            players can be locked. Blacklist mode excludes specific players from
+            targeting. Useful for protecting friends or focusing specific
+            enemies in a team fight.
+          </p>
+        </div>
+
+        <div class="doc-sec" id="bfchain">
+          <h2>Black Flash Chain <span class="anchor">#bfchain</span></h2>
+          <p>
+            There are two versions. The standard one triggers after divergent
+            fist animations play and handles timing automatically. The legit
+            version (premium) dashes around the target on an arc first, lands
+            behind them, then fires the black flash at the right moment so it
+            looks like a player doing it.
+          </p>
+
+          <h3>Tuning the legit version</h3>
+          <ul>
+            <li>
+              <strong>Target Distance:</strong> How close the enemy needs to be
+              for it to fire. 30 studs is a good starting point.
+            </li>
+            <li>
+              <strong>Dash Delay:</strong> How long after the dash starts before
+              the black flash fires. Adjust down if you have high ping, up if
+              you are missing.
+            </li>
+            <li>
+              <strong>Auto Angle:</strong> Automatically picks the best approach
+              angle based on which way the target is facing. Worth turning on.
+            </li>
+            <li>
+              <strong>No Stick:</strong> Disables the arc redirect and just
+              dashes straight. Some people prefer this.
+            </li>
+          </ul>
+        </div>
+
+        <div class="doc-sec" id="combos">
+          <h2>Combo System <span class="anchor">#combos</span></h2>
+          <p>
+            Record any sequence of button presses and save it. Play it back on
+            demand with a keybind or from the UI. Combos save to files so they
+            persist between sessions and can be shared with other people.
+          </p>
+
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h4>Start recording</h4>
+                <p>
+                  Hit Start Recording in the Combo tab. From that point every
+                  key press and click gets captured including timing.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h4>Do your combo</h4>
+                <p>
+                  Click M1, press ability keys, dash, whatever. Everything is
+                  recorded exactly as you do it including any pauses between
+                  inputs.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h4>Stop and save</h4>
+                <p>
+                  Click Stop Recording, type a name in the box, and hit Save.
+                  The file saves automatically and shows up in the combo select
+                  dropdown.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <h4>Play it back</h4>
+                <p>
+                  Pick it from the dropdown, set a keybind if you want, and
+                  press play. Speed and stop conditions are adjustable from the
+                  same tab.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-sec" id="adv-script">
+          <h2>Advanced Scripts <span class="anchor">#adv-script</span></h2>
+          <p>
+            The Advanced Combo tab has its own simple scripting language for
+            when you need more than a recorded replay. You can add conditions,
+            loops, waits, lock on commands, and more. This is a full reference
+            for every command.
+          </p>
+
+          <h3>Basic lines</h3>
+          <table class="opts-table">
+            <thead>
+              <tr>
+                <th>Syntax</th>
+                <th>What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{</td>
+                <td>Start combo lines</td>
+              </tr>
+              <tr>
+                <td>}</td>
+                <td>End combo lines</td>
+              </tr>
+              <tr>
+                <td>//</td>
+                <td>Note line, script will ignore it</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Target and setup commands</h3>
+          <table class="opts-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>checkchar(name)</td>
+                <td>Only continue if your current character is this name</td>
+              </tr>
+              <tr>
+                <td>lockclosest(number)</td>
+                <td>
+                  Lock to nearest enemy. You can set max distance optionally
+                </td>
+              </tr>
+              <tr>
+                <td>lockselected()</td>
+                <td>Lock to the player you picked in dropdown (LBB / AB)</td>
+              </tr>
+              <tr>
+                <td>settarget(mode_or_name)</td>
+                <td>Pick target by mode or by name</td>
+              </tr>
+              <tr>
+                <td>unlock()</td>
+                <td>Remove lock target</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Action commands</h3>
+          <table class="opts-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>key(name, number)</td>
+                <td>Press a key, optional hold time</td>
+              </tr>
+              <tr>
+                <td>press(name, number)</td>
+                <td>Same as key</td>
+              </tr>
+              <tr>
+                <td>m1()</td>
+                <td>Left click attack</td>
+              </tr>
+              <tr>
+                <td>m2()</td>
+                <td>Right click attack</td>
+              </tr>
+              <tr>
+                <td>block()</td>
+                <td>Hold block</td>
+              </tr>
+              <tr>
+                <td>unblock()</td>
+                <td>Stop blocking</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Time and logic commands</h3>
+          <table class="opts-table">
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>wait(number)</td>
+                <td>Wait this many seconds</td>
+              </tr>
+              <tr>
+                <td>waitforanimend()</td>
+                <td>Wait until attack animation is done</td>
+              </tr>
+              <tr>
+                <td>waitforattackanim()</td>
+                <td>Same as waitforanimend()</td>
+              </tr>
+              <tr>
+                <td>waithit(number)</td>
+                <td>Wait for hit. Default timeout is 1.25</td>
+              </tr>
+              <tr>
+                <td>stopif(condition)</td>
+                <td>Stop combo if condition is true</td>
+              </tr>
+              <tr>
+                <td>if(condition) then (command)</td>
+                <td>Run command only if condition is true</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Your conditions</h3>
+          <p>
+            These check your own character state. You can use either the full
+            name or the shorthand alias.
+          </p>
+          <table class="opts-table">
+            <thead>
+              <tr>
+                <th>Condition</th>
+                <th>What it checks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>inult</td>
+                <td>You are in ult</td>
+              </tr>
+              <tr>
+                <td>dead</td>
+                <td>Your character is dead</td>
+              </tr>
+              <tr>
+                <td>needburst / burst</td>
+                <td>You can use burst while stunned or ragdolled</td>
+              </tr>
+              <tr>
+                <td>ragdolled / ragdoll</td>
+                <td>You are ragdolled</td>
+              </tr>
+              <tr>
+                <td>stunned / stun</td>
+                <td>You are stunned</td>
+              </tr>
+              <tr>
+                <td>blocking / block</td>
+                <td>You are blocking</td>
+              </tr>
+              <tr>
+                <td>notblocking / unblocking</td>
+                <td>You are not blocking</td>
+              </tr>
+              <tr>
+                <td>lowhp</td>
+                <td>Your HP is low (35% or less)</td>
+              </tr>
+              <tr>
+                <td>whiffed / whiff</td>
+                <td>Your last attack missed</td>
+              </tr>
+              <tr>
+                <td>thirdparty</td>
+                <td>Another enemy is close</td>
+              </tr>
+              <tr>
+                <td>hitanim / hit</td>
+                <td>Hit animation was found</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Enemy conditions</h3>
+          <p>
+            Add <code>enemy</code> at the end to check the enemy state instead
+            of your own.
+          </p>
+          <table class="opts-table">
+            <thead>
+              <tr>
+                <th>Condition</th>
+                <th>What it checks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>inultenemy</td>
+                <td>Enemy is in ult</td>
+              </tr>
+              <tr>
+                <td>deadenemy</td>
+                <td>Enemy is dead</td>
+              </tr>
+              <tr>
+                <td>needburstenemy / burstenemy</td>
+                <td>Enemy can burst while stunned or ragdolled</td>
+              </tr>
+              <tr>
+                <td>ragdolledenemy / ragdollenemy</td>
+                <td>Enemy is ragdolled</td>
+              </tr>
+              <tr>
+                <td>stunnedenemy / stunenemy</td>
+                <td>Enemy is stunned</td>
+              </tr>
+              <tr>
+                <td>blockingenemy / blockenemy</td>
+                <td>Enemy is blocking</td>
+              </tr>
+              <tr>
+                <td>notblockingenemy / unblockingenemy</td>
+                <td>Enemy is not blocking</td>
+              </tr>
+              <tr>
+                <td>lowhpenemy</td>
+                <td>Enemy HP is low (35% or less)</td>
+              </tr>
+              <tr>
+                <td>whiffedenemy / whiffenemy</td>
+                <td>Enemy missed (same whiff check logic)</td>
+              </tr>
+              <tr>
+                <td>thirdpartyenemy</td>
+                <td>Enemy has another player close</td>
+              </tr>
+              <tr>
+                <td>hitanimenemy / hitenemy</td>
+                <td>Enemy has hit animation or hit state</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Key names you can use</h3>
+          <p>
+            <code>1</code> &nbsp; <code>2</code> &nbsp; <code>3</code> &nbsp;
+            <code>4</code> &nbsp; <code>r</code> &nbsp; <code>q</code> &nbsp;
+            <code>f</code> &nbsp; <code>e</code> &nbsp;
+            <code>space</code> &nbsp; <code>w</code> &nbsp;
+            <code>a</code> &nbsp; <code>s</code> &nbsp;
+            <code>d</code>
+          </p>
+
+          <h3>How it runs</h3>
+          <ul>
+            <li>
+              <code>playadvcombo(raw)</code> reads your combo one line at a
+              time.
+            </li>
+            <li>If a line is wrong, it gives a warning.</li>
+            <li>
+              <strong>lockclosest</strong>, <strong>lockselected</strong>,
+              <strong>settarget</strong> keep lock during combo.
+            </li>
+            <li>
+              <strong>unlock</strong>, combo stop, or combo end will clear lock.
+            </li>
+          </ul>
+
+          <h3>Example</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot"></div>
+                <div class="code-dot"></div>
+                <div class="code-dot"></div>
+              </div>
+              <div class="code-filename">example combo script</div>
+            </div>
+            <div class="code-body">
+              <span class="cm"
+                >-- lock onto someone, loop m1 into bfc when they block</span
+              ><br />
+              lockclosest 40<br />
+              loopstart<br />
+              &nbsp;&nbsp;stopif deadenemy<br />
+              &nbsp;&nbsp;m1<br />
+              &nbsp;&nbsp;wait 0.2<br />
+              &nbsp;&nbsp;m1<br />
+              &nbsp;&nbsp;wait 0.2<br />
+              &nbsp;&nbsp;m1<br />
+              &nbsp;&nbsp;if blockingenemy then bfc 0.35 waitforanimend<br />
+              &nbsp;&nbsp;waitforanimend<br />
+              loopuntil deadenemy
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-sec" id="mobile">
+          <h2>Mobile Setup <span class="anchor">#mobile</span></h2>
+          <p>
+            The script automatically detects mobile and adjusts how it works.
+            Lock on targets the closest player to the center of the screen
+            rather than the mouse position. Ability buttons fire by slot number
+            instead of keyboard keys.
+          </p>
+
+          <h3>Mobile toggle buttons</h3>
+          <p>
+            In the UI Settings tab, pick any toggles from the Show on Mobile
+            dropdown. Then click Toggle Mobile UI to put draggable buttons on
+            the screen for each one. You can move them around by dragging, and
+            lock their positions once they are where you want them.
+          </p>
+
+          <ul>
+            <li>
+              <strong>Lock Button Positions:</strong> Stops buttons from being
+              accidentally dragged during a fight.
+            </li>
+            <li>
+              <strong>Reset Button Positions:</strong> Moves everything back to
+              the default grid if you mess up the layout.
+            </li>
+          </ul>
+        </div>
+
+        <div class="doc-sec" id="config">
+          <h2>Config files <span class="anchor">#config</span></h2>
+          <p>
+            Everything saves into the XenonHub folder inside your executor
+            workspace. Here is what each file does.
+          </p>
+
+          <table class="opts-table">
+            <thead>
+              <tr>
+                <th>File</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>XenonHub/JJS/*.json</td>
+                <td>Named UI configs saved from the SaveManager</td>
+              </tr>
+              <tr>
+                <td>XenonHub/combos/*.json</td>
+                <td>Saved combo recordings</td>
+              </tr>
+              <tr>
+                <td>XenonHub/mobiletoggles.json</td>
+                <td>Which toggles show as mobile buttons</td>
+              </tr>
+              <tr>
+                <td>XenonHub/mobilepositions.json</td>
+                <td>Where you dragged the mobile buttons</td>
+              </tr>
+              <tr>
+                <td>XenonHub/tplocations.json</td>
+                <td>Custom saved teleport positions (premium)</td>
+              </tr>
+              <tr>
+                <td>XenonHub/JJS/Songs/</td>
+                <td>Audio files for the Hakari music replacement</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="doc-sec" id="troubleshoot">
+          <h2>Troubleshooting <span class="anchor">#troubleshoot</span></h2>
+
+          <h3>Auto block stopped working after a JJS update</h3>
+          <p>
+            JJS changes animation IDs when they patch things. The script gets
+            updated to match. Just re execute and you will be on the latest
+            version.
+          </p>
+
+          <h3>Lock on keeps targeting the wrong person</h3>
+          <p>
+            Use the whitelist mode in the Lock Target Filter section to restrict
+            it to specific players. Or enable Locked Target Only in the Auto
+            Block tab so everything respects the same target.
+          </p>
+
+          <h3>Black flash arc is missing</h3>
+          <p>
+            Try lowering the Dash Delay slider by 0.05 at a time until it lands.
+            Higher ping usually needs a lower delay value. Enable Auto Angle as
+            well since it helps the approach path.
+          </p>
+
+          <h3>The script says functions are missing</h3>
+          <p>
+            A notification on load will list any functions your executor does
+            not have. Features that need those functions get disabled. Switching
+            to Wave fixes most of these cases.
+          </p>
+
+          <h3>Combos play back too fast or too slow</h3>
+          <p>
+            Adjust the speed multiplier in the Combo tab. Higher values speed up
+            playback. If inputs are dropping, enable Wait For Animation so each
+            step waits for the previous attack to finish before moving on.
+          </p>
+        </div>
+
+        <div style="height: 60px"></div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container">
+        <div class="footer-inner">
+          <a href="index.html" class="nav-logo"
+            ><div class="logo-mark" style="width: 18px; height: 18px"></div>
+            Xenon Hub</a
+          >
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="keysystem.html">Key System</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="discord.html">Discord</a></li>
+          </ul>
+          <div class="footer-copy">xenon hub // documentation</div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile hamburger menu toggle
+      document.querySelector('.nav-hamburger').addEventListener('click', function() {
+        this.closest('nav').classList.toggle('nav-open');
+      });
+      document.querySelectorAll('.nav-links a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          document.querySelector('nav').classList.remove('nav-open');
+        });
+      });
+
+      const cursor = document.getElementById("cursor");
+      const ring = document.getElementById("cursorRing");
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+      });
+      (function loop() {
+        cursor.style.left = mx + "px";
+        cursor.style.top = my + "px";
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+        requestAnimationFrame(loop);
+      })();
+
+      document
+        .getElementById("copyLoader")
+        .addEventListener("click", function () {
+          navigator.clipboard
+            .writeText(
+              'loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/eed1b8c86a83b71bf7e8ec398fc39401.lua"))()',
+            )
+            .catch(() => {});
+          this.textContent = "copied!";
+          this.style.color = "var(--accent-light)";
+          setTimeout(() => {
+            this.textContent = "copy";
+            this.style.color = "";
+          }, 2000);
+        });
+
+      const sections = document.querySelectorAll(".doc-sec[id]");
+      const links = document.querySelectorAll(".sb-link");
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              links.forEach((l) => l.classList.remove("active"));
+              const a = document.querySelector(
+                `.sb-link[href="#${e.target.id}"]`,
+              );
+              if (a) a.classList.add("active");
+            }
+          });
+        },
+        { rootMargin: "-25% 0px -65% 0px" },
+      );
+      sections.forEach((s) => obs.observe(s));
+
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          const t = document.querySelector(a.getAttribute("href"));
+          if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    </script>
+  </body>
+</html>

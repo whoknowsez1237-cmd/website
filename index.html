@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xenon Hub — JJS Combat Script</title>
+    <link rel="icon" type="image/png" href="logo2.png" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 130px 0 80px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-glow {
+        position: absolute;
+        top: -10%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 700px;
+        height: 500px;
+        background: radial-gradient(
+          ellipse,
+          rgba(168, 85, 247, 0.1) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .hero-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 30px;
+      }
+      .hero-eyebrow-line {
+        width: 40px;
+        height: 1px;
+        background: var(--accent);
+      }
+
+      .hero h1 {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: clamp(50px, 7vw, 92px);
+        line-height: 0.96;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        margin-bottom: 28px;
+      }
+      .hero h1 .accent {
+        color: var(--accent-light);
+        display: block;
+      }
+
+      .hero-desc {
+        font-size: 16px;
+        color: var(--text-dim);
+        max-width: 500px;
+        line-height: 1.75;
+        margin-bottom: 44px;
+      }
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .hero-stats {
+        display: flex;
+        margin-top: 80px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        max-width: 580px;
+        background: var(--surface);
+      }
+      .hero-stat {
+        flex: 1;
+        padding: 22px 28px;
+        border-right: 1px solid var(--border);
+      }
+      .hero-stat:last-child {
+        border-right: none;
+      }
+      .hero-stat-num {
+        font-family: "Syne", sans-serif;
+        font-size: 30px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.02em;
+      }
+      .hero-stat-num span {
+        color: var(--accent-light);
+      }
+      .hero-stat-label {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 3px;
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: 0.04em;
+      }
+
+      .scroll-indicator {
+        position: absolute;
+        bottom: 36px;
+        left: 52px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--text-muted);
+        letter-spacing: 0.08em;
+      }
+      .scroll-line {
+        width: 40px;
+        height: 1px;
+        background: var(--border2);
+        position: relative;
+        overflow: hidden;
+      }
+      .scroll-line::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--accent);
+        animation: slideRight 2.2s ease infinite;
+      }
+
+      .strip {
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .strip-inner {
+        display: flex;
+      }
+      .strip-item {
+        flex: 1;
+        padding: 22px 28px;
+        border-right: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        transition: background 0.2s;
+      }
+      .strip-item:last-child {
+        border-right: none;
+      }
+      .strip-item:hover {
+        background: var(--surface2);
+      }
+      .strip-icon {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border2);
+        border-radius: var(--radius);
+        flex-shrink: 0;
+        color: var(--accent-light);
+      }
+      .strip-icon svg {
+        width: 15px;
+        height: 15px;
+      }
+      .strip-text strong {
+        display: block;
+        font-family: "Syne", sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .strip-text span {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      .features-section {
+        padding: 100px 0;
+      }
+      .section-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 52px;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .section-sub {
+        color: var(--text-muted);
+        font-size: 13px;
+        max-width: 300px;
+        text-align: right;
+        line-height: 1.6;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      .feat-card {
+        background: var(--surface);
+        padding: 32px 28px;
+        transition: background 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .feat-card:hover {
+        background: var(--surface2);
+      }
+      .feat-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(168, 85, 247, 0.04),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .feat-card:hover::before {
+        opacity: 1;
+      }
+      .feat-card-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        margin-bottom: 16px;
+        opacity: 0.7;
+      }
+      .feat-card h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 10px;
+      }
+      .feat-card p {
+        font-size: 13.5px;
+        color: var(--text-dim);
+        line-height: 1.65;
+      }
+      .feat-card-bg-num {
+        position: absolute;
+        bottom: 12px;
+        right: 18px;
+        font-family: "Syne", sans-serif;
+        font-size: 48px;
+        font-weight: 800;
+        color: var(--border);
+        line-height: 1;
+        pointer-events: none;
+        transition: color 0.3s;
+      }
+      .feat-card:hover .feat-card-bg-num {
+        color: var(--border2);
+      }
+      .feat-card-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+
+      .premium-callout {
+        background: var(--surface);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-radius: var(--radius-lg);
+        padding: 52px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 40px;
+        position: relative;
+        overflow: hidden;
+      }
+      .premium-callout::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at top right,
+          rgba(212, 175, 55, 0.06) 0%,
+          transparent 60%
+        );
+        pointer-events: none;
+      }
+      .premium-callout::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(212, 175, 55, 0.5),
+          transparent
+        );
+      }
+      .prem-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--premium);
+        margin-bottom: 14px;
+      }
+      .prem-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--premium);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      .premium-callout h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 30px;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 14px;
+        letter-spacing: -0.02em;
+      }
+      .premium-callout p {
+        font-size: 14px;
+        color: var(--text-dim);
+        max-width: 460px;
+        line-height: 1.75;
+      }
+      .prem-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
+        flex-shrink: 0;
+      }
+      .btn-premium {
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.15),
+          rgba(212, 175, 55, 0.3)
+        );
+        color: var(--premium);
+        border: 1px solid rgba(212, 175, 55, 0.4);
+        font-family: "JetBrains Mono", monospace;
+        box-shadow:
+          0 0 20px rgba(212, 175, 55, 0.1),
+          inset 0 1px 0 rgba(212, 175, 55, 0.1);
+      }
+      .btn-premium:hover {
+        box-shadow:
+          0 0 30px rgba(212, 175, 55, 0.25),
+          0 0 60px rgba(212, 175, 55, 0.08);
+        text-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+        border-color: rgba(212, 175, 55, 0.7);
+        transform: translateY(-1px);
+      }
+
+      .compat-section {
+        padding: 80px 0;
+      }
+      .compat-grid {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .compat-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        color: var(--text-dim);
+        transition:
+          border-color 0.2s,
+          color 0.2s;
+      }
+      .compat-item:hover {
+        border-color: rgba(168, 85, 247, 0.35);
+        color: var(--text);
+      }
+      .compat-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--accent);
+        border-radius: 50%;
+        box-shadow: 0 0 6px rgba(168, 85, 247, 0.6);
+      }
+
+      .quickstart {
+        padding: 0 0 100px;
+      }
+      .code-block {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      .code-header {
+        padding: 12px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface2);
+      }
+      .code-dots {
+        display: flex;
+        gap: 7px;
+      }
+      .code-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .code-dot:nth-child(1) {
+        background: #e05050;
+      }
+      .code-dot:nth-child(2) {
+        background: #f59e0b;
+      }
+      .code-dot:nth-child(3) {
+        background: var(--accent);
+      }
+      .code-filename {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .copy-btn {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--text-muted);
+        background: rgba(12, 9, 18, 0.8);
+        border: 1px solid var(--border);
+        padding: 4px 12px;
+        border-radius: 0;
+        cursor: none;
+        transition: all 0.25s;
+        clip-path: polygon(
+          0 0,
+          calc(100% - 5px) 0,
+          100% 5px,
+          100% 100%,
+          5px 100%,
+          0 calc(100% - 5px)
+        );
+        letter-spacing: 0.04em;
+      }
+      .copy-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent-light);
+        text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.1);
+      }
+      .code-body {
+        padding: 24px 28px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        line-height: 1.9;
+        color: var(--text-dim);
+        overflow-x: auto;
+      }
+      .code-body .cm {
+        color: var(--text-muted);
+        font-style: italic;
+      }
+      .code-body .fn {
+        color: var(--accent-light);
+      }
+      .code-body .st {
+        color: #fde68a;
+      }
+
+      @media (max-width: 960px) {
+        .features-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .premium-callout {
+          grid-template-columns: 1fr;
+        }
+        .prem-actions {
+          align-items: flex-start;
+        }
+        .strip-inner {
+          flex-wrap: wrap;
+        }
+        .strip-item {
+          border-bottom: 1px solid var(--border);
+          border-right: none;
+          min-width: 50%;
+        }
+      }
+      @media (max-width: 600px) {
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero-stats {
+          display: none;
+        }
+        .scroll-indicator {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <nav>
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark"></div>
+        Xenon Hub
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="keysystem.html">Key System</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="discord.html">Discord</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="docs.html" class="btn btn-ghost">Get Started</a>
+        <a href="pricing.html" class="btn btn-primary">Purchase</a>
+      </div>
+      <button class="nav-hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-glow"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-eyebrow animate-fade-up">
+            <div class="tag">Jujutsu Shenanigans</div>
+            <div class="hero-eyebrow-line"></div>
+          </div>
+          <h1 class="animate-fade-up delay-1">
+            The Best
+            <span class="accent">Xenon</span>
+          </h1>
+          <p class="hero-desc animate-fade-up delay-2">
+            Xenon Hub is a Jujutsu Shenanigans combat script with auto block,
+            lock on, black flash chaining, character specific automation, and a
+            full combo system. Everything you need, in one place.
+          </p>
+          <div class="hero-actions animate-fade-up delay-3">
+            <a href="pricing.html" class="btn btn-primary btn-large"
+              >Get Access</a
+            >
+            <a href="features.html" class="btn btn-ghost btn-large"
+              >View Features</a
+            >
+          </div>
+          <div class="hero-stats animate-fade-up delay-4">
+            <div class="hero-stat">
+              <div class="hero-stat-num">70<span>+</span></div>
+              <div class="hero-stat-label">features</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">10<span>+</span></div>
+              <div class="hero-stat-label">characters</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">JJS</div>
+              <div class="hero-stat-label">4.0.0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        <div class="scroll-line"></div>
+        <span>scroll</span>
+      </div>
+    </section>
+
+    <div class="strip">
+      <div class="strip-inner">
+        <div class="strip-item">
+          <div class="strip-icon">
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path d="M8 1.5L1.5 5v6L8 14.5l6.5-3.5V5z" />
+            </svg>
+          </div>
+          <div class="strip-text">
+            <strong>Auto Block</strong>
+            <span>animation aware</span>
+          </div>
+        </div>
+        <div class="strip-item">
+          <div class="strip-icon">
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <circle cx="8" cy="8" r="6.5" />
+              <circle cx="8" cy="8" r="2" />
+            </svg>
+          </div>
+          <div class="strip-text">
+            <strong>Lock On</strong>
+            <span>with prediction</span>
+          </div>
+        </div>
+        <div class="strip-item">
+          <div class="strip-icon">
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path d="M3 8h10M8 3l5 5-5 5" />
+            </svg>
+          </div>
+          <div class="strip-text">
+            <strong>BF Chain</strong>
+            <span>ping compensated</span>
+          </div>
+        </div>
+        <div class="strip-item">
+          <div class="strip-icon">
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <rect x="2" y="2" width="12" height="12" rx="1.5" />
+              <path d="M5 8h6M5 5.5h4M5 10.5h3" />
+            </svg>
+          </div>
+          <div class="strip-text">
+            <strong>Combo Recorder</strong>
+            <span>record and replay</span>
+          </div>
+        </div>
+        <div class="strip-item">
+          <div class="strip-icon">
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path d="M2 4h12M2 8h8M2 12h10" />
+            </svg>
+          </div>
+          <div class="strip-text">
+            <strong>ESP</strong>
+            <span>box, name, health</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header animate-fade-up">
+          <div>
+            <div class="tag" style="margin-bottom: 18px">What's inside</div>
+            <h2 class="section-title">
+              Tight systems.<br /><span>Real results.</span>
+            </h2>
+          </div>
+          <p class="section-sub">
+            Every feature is built around how the game actually works, not how
+            you wish it worked.
+          </p>
+        </div>
+
+        <div class="features-grid animate-fade-up delay-2">
+          <div class="feat-card">
+            <div class="feat-card-num">01</div>
+            <h3>Auto Block</h3>
+            <p>
+              Reads every character's animations in real time and blocks
+              automatically. Handles multi hit combos, grabs, projectiles, and
+              even domain scenarios without you touching anything.
+            </p>
+            <div class="feat-card-bg-num">01</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card-num">02</div>
+            <div class="feat-card-badge">
+              <span class="badge badge-premium">Premium</span>
+            </div>
+            <h3>Legit Black Flash</h3>
+            <p>
+              Side dashes around the target on a calculated arc, lands behind
+              them, and fires a black flash at the right moment. Looks like a
+              player doing it manually.
+            </p>
+            <div class="feat-card-bg-num">02</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card-num">03</div>
+            <h3>Lock On</h3>
+            <p>
+              Camera lock, character lock, and native JJS lock on all supported
+              at once. Prediction tracks where the target is going so you stay
+              on them through dashes and side steps.
+            </p>
+            <div class="feat-card-bg-num">03</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card-num">04</div>
+            <h3>Combo Recorder</h3>
+            <p>
+              Record any sequence of inputs, save it, and play it back on
+              demand. Has a full scripting mode with loops, conditions, and
+              control flow for more complex sequences.
+            </p>
+            <div class="feat-card-bg-num">04</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card-num">05</div>
+            <h3>Character Modules</h3>
+            <p>
+              Dedicated automation for Itadori, Todo, Hakari, Megumi, Naoya,
+              Yuki, Toji, Mahoraga, Haruta, Mahito, Choso, and more. Not generic
+              ability spam but properly timed, character specific logic.
+            </p>
+            <div class="feat-card-bg-num">05</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card-num">06</div>
+            <div class="feat-card-badge">
+              <span class="badge badge-free">Free</span>
+            </div>
+            <h3>ESP and Visuals</h3>
+            <p>
+              Box, name, health, distance, moveset, tracer, and damage numbers.
+              Cooldown revealer and evade chams on top of that. All colour
+              customisable from the UI.
+            </p>
+            <div class="feat-card-bg-num">06</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px">
+          <a href="features.html" class="btn btn-outline btn-large"
+            >See every feature</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: 0 0 100px">
+      <div class="container">
+        <div class="premium-callout animate-fade-up">
+          <div>
+            <div class="prem-label">
+              <div class="prem-dot"></div>
+              Premium
+            </div>
+            <h2>Unlock the full thing.</h2>
+            <p>
+              Legit Black Flash, Auto Aim, Hitbox Extender, Always Downslam,
+              Auto Higurama, Autofarm, Invisibility, and custom teleport
+              locations are all behind premium. One purchase and everything is
+              yours with no time limit.
+            </p>
+          </div>
+          <div class="prem-actions">
+            <a href="pricing.html" class="btn btn-premium btn-large"
+              >View Pricing</a
+            >
+            <a href="discord.html" class="btn btn-ghost">Join Discord</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="compat-section">
+      <div class="container">
+        <div style="margin-bottom: 32px" class="animate-fade-up">
+          <div class="tag" style="margin-bottom: 18px">Compatibility</div>
+          <h2 class="section-title">Executor <span>support.</span></h2>
+        </div>
+        <div class="compat-grid animate-fade-up delay-2">
+          <div class="compat-item">
+            <div class="compat-dot"></div>
+            Potassium
+          </div>
+          <div class="compat-item">
+            <div class="compat-dot"></div>
+            Astroid
+          </div>
+          <div class="compat-item">
+            <div class="compat-dot"></div>
+            Velocity
+          </div>
+          <div class="compat-item">
+            <div class="compat-dot"></div>
+            Delta (Mobile)
+          </div>
+          <div class="compat-item" style="opacity: 0.6">
+            <div
+              class="compat-dot"
+              style="background: var(--text-muted); box-shadow: none"
+            ></div>
+            Others (UNC required)
+          </div>
+        </div>
+        <p
+          style="
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-family: &quot;JetBrains Mono&quot;, monospace;
+          "
+        >
+          Potassium/Delta are recommended for their respective devices.
+        </p>
+      </div>
+    </section>
+
+    <section class="quickstart">
+      <div class="container">
+        <div style="margin-bottom: 32px" class="animate-fade-up">
+          <div class="tag" style="margin-bottom: 18px">Quickstart</div>
+          <h2 class="section-title">One line to <span>load.</span></h2>
+        </div>
+        <div class="code-block animate-fade-up delay-2">
+          <div class="code-header">
+            <div class="code-dots">
+              <div class="code-dot"></div>
+              <div class="code-dot"></div>
+              <div class="code-dot"></div>
+            </div>
+            <div class="code-filename">executor console</div>
+            <button class="copy-btn" id="copyBtn">copy</button>
+          </div>
+          <div class="code-body">
+            <span class="cm">-- paste this into your executor and run it</span
+            ><br />
+            <span class="fn">loadstring</span>(<span class="fn">game</span
+            >:<span class="fn">HttpGet</span>(<span class="st"
+              >"https://api.luarmor.net/files/v3/loaders/eed1b8c86a83b71bf7e8ec398fc39401.lua"</span
+            >))()
+          </div>
+        </div>
+        <p style="margin-top: 18px; font-size: 13px; color: var(--text-muted)">
+          First time? Check the
+          <a
+            href="docs.html"
+            style="color: var(--accent-light); text-decoration: none"
+            >setup guide</a
+          >
+          for everything you need to get going.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-inner">
+          <a href="index.html" class="nav-logo">
+            <div class="logo-mark"></div>
+            Xenon Hub
+          </a>
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="keysystem.html">Key System</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="discord.html">Discord</a></li>
+          </ul>
+          <div class="footer-copy">xenon hub // jujutsu shenanigans</div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile hamburger menu toggle
+      document
+        .querySelector(".nav-hamburger")
+        .addEventListener("click", function () {
+          this.closest("nav").classList.toggle("nav-open");
+        });
+      document.querySelectorAll(".nav-links a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          document.querySelector("nav").classList.remove("nav-open");
+        });
+      });
+
+      const cursor = document.getElementById("cursor");
+      const ring = document.getElementById("cursorRing");
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+      });
+      (function loop() {
+        cursor.style.left = mx + "px";
+        cursor.style.top = my + "px";
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+        requestAnimationFrame(loop);
+      })();
+
+      document.getElementById("copyBtn").addEventListener("click", function () {
+        navigator.clipboard
+          .writeText(
+            'loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/eed1b8c86a83b71bf7e8ec398fc39401.lua"))()',
+          )
+          .catch(() => {});
+        this.textContent = "copied!";
+        this.style.color = "var(--accent-light)";
+        setTimeout(() => {
+          this.textContent = "copy";
+          this.style.color = "";
+        }, 2000);
+      });
+
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.style.opacity = "1";
+              e.target.style.transform = "translateY(0)";
+            }
+          });
+        },
+        { threshold: 0.08 },
+      );
+      document.querySelectorAll(".animate-fade-up").forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(20px)";
+        el.style.transition =
+          "opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)";
+        obs.observe(el);
+      });
+    </script>
+  </body>
+</html>

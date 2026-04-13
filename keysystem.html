@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Key System — Xenon Hub</title>
+    <link rel="icon" type="image/png" href="logo2.png" />
+    <meta
+      name="description"
+      content="Learn how to get and activate your Xenon Hub key. Step by step guide for the key system."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .page-hero {
+        padding: 140px 0 64px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+      }
+      .page-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 20% 60%,
+          rgba(168, 85, 247, 0.07) 0%,
+          transparent 55%
+        );
+        pointer-events: none;
+      }
+      .page-hero h1 {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(36px, 5vw, 62px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.02;
+        color: var(--text);
+        margin-bottom: 16px;
+      }
+      .page-hero h1 span {
+        color: var(--accent-light);
+      }
+      .page-hero p {
+        font-size: 15px;
+        color: var(--text-dim);
+        max-width: 520px;
+        line-height: 1.75;
+      }
+      .breadcrumb {
+        display: flex;
+        gap: 8px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        align-items: center;
+      }
+      .breadcrumb a {
+        color: var(--accent-light);
+        text-decoration: none;
+      }
+      .breadcrumb span {
+        opacity: 0.4;
+      }
+
+      /* Fire banner */
+      .fire-banner {
+        margin-top: 48px;
+        padding: 20px 24px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(
+          135deg,
+          rgba(245, 158, 11, 0.08) 0%,
+          rgba(239, 68, 68, 0.06) 100%
+        );
+        border: 1px solid rgba(245, 158, 11, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .fire-banner-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+        filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
+        animation: fireGlow 2s ease-in-out infinite;
+      }
+      @keyframes fireGlow {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
+        }
+        50% {
+          filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.7));
+        }
+      }
+      .fire-banner-text {
+        font-family: "Syne", sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        color: #f59e0b;
+        letter-spacing: -0.01em;
+      }
+      .fire-banner-text span {
+        display: block;
+        font-family: "Epilogue", sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--text-dim);
+        margin-top: 3px;
+      }
+
+      /* Steps timeline */
+      .key-steps {
+        margin-top: 52px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: relative;
+      }
+      .key-steps::before {
+        content: "";
+        position: absolute;
+        left: 23px;
+        top: 38px;
+        bottom: 38px;
+        width: 1px;
+        background: linear-gradient(
+          180deg,
+          rgba(168, 85, 247, 0.4) 0%,
+          rgba(168, 85, 247, 0.15) 50%,
+          rgba(168, 85, 247, 0.4) 100%
+        );
+      }
+
+      .key-step {
+        display: flex;
+        gap: 28px;
+        padding: 28px 0;
+        position: relative;
+      }
+      .key-step:not(:last-child) {
+        border-bottom: 1px solid rgba(30, 22, 40, 0.5);
+      }
+
+      .step-marker {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--surface2);
+        border: 2px solid rgba(168, 85, 247, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-family: "Syne", sans-serif;
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--accent-light);
+        position: relative;
+        z-index: 2;
+        transition: all 0.3s;
+      }
+      .key-step:hover .step-marker {
+        border-color: var(--accent);
+        background: rgba(168, 85, 247, 0.12);
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+      }
+
+      .step-content {
+        flex: 1;
+        padding-top: 4px;
+      }
+      .step-content h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        margin-bottom: 10px;
+      }
+      .step-content p {
+        font-size: 14px;
+        color: var(--text-dim);
+        line-height: 1.8;
+        margin-bottom: 16px;
+      }
+
+      /* Link buttons */
+      .key-links {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 4px;
+      }
+      .key-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 22px;
+        background: rgba(12, 9, 18, 0.8);
+        border: 1px solid var(--border);
+        border-radius: 0;
+        text-decoration: none;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text);
+        transition: all 0.25s;
+        position: relative;
+        overflow: hidden;
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+        letter-spacing: 0.04em;
+      }
+      .key-link::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(168, 85, 247, 0.06),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .key-link:hover::before {
+        opacity: 1;
+      }
+      .key-link:hover {
+        border-color: rgba(168, 85, 247, 0.5);
+        transform: translateY(-1px);
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.12);
+        text-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+      }
+      .key-link-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 0;
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(147, 51, 234, 0.35));
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
+      }
+      .key-link-icon svg {
+        width: 14px;
+        height: 14px;
+        color: var(--accent-light);
+      }
+      .key-link-meta {
+        display: flex;
+        flex-direction: column;
+      }
+      .key-link-label {
+        font-size: 12px;
+        color: var(--text);
+        letter-spacing: 0.04em;
+      }
+      .key-link-sub {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        color: var(--text-muted);
+        letter-spacing: 0.04em;
+        font-weight: 400;
+        margin-top: 1px;
+      }
+
+      /* Discord link special style */
+      .key-link.discord {
+        border-color: rgba(88, 101, 242, 0.3);
+      }
+      .key-link.discord:hover {
+        border-color: rgba(88, 101, 242, 0.5);
+        box-shadow: 0 0 20px rgba(88, 101, 242, 0.15);
+        text-shadow: 0 0 8px rgba(88, 101, 242, 0.3);
+      }
+      .key-link.discord .key-link-icon {
+        background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(71, 82, 196, 0.35));
+        border-color: rgba(88, 101, 242, 0.3);
+      }
+
+      /* Code example */
+      .code-block {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin: 16px 0 8px;
+      }
+      .code-header {
+        padding: 11px 18px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface2);
+      }
+      .code-dots {
+        display: flex;
+        gap: 7px;
+      }
+      .code-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .code-dot:nth-child(1) {
+        background: #e05050;
+      }
+      .code-dot:nth-child(2) {
+        background: #f59e0b;
+      }
+      .code-dot:nth-child(3) {
+        background: var(--accent);
+      }
+      .code-filename {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .copy-btn {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--text-muted);
+        background: rgba(12, 9, 18, 0.8);
+        border: 1px solid var(--border);
+        padding: 3px 12px;
+        border-radius: 0;
+        cursor: none;
+        transition: all 0.25s;
+        clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
+        letter-spacing: 0.04em;
+      }
+      .copy-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent-light);
+        text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+        box-shadow: 0 0 10px rgba(168, 85, 247, 0.1);
+      }
+      .code-body {
+        padding: 22px 26px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        line-height: 1.9;
+        color: var(--text-dim);
+        overflow-x: auto;
+      }
+      .code-body .cm {
+        color: var(--text-muted);
+        font-style: italic;
+      }
+      .code-body .fn {
+        color: var(--accent-light);
+      }
+      .code-body .st {
+        color: #fde68a;
+      }
+      .code-body .hl {
+        color: #34d399;
+      }
+
+      code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--accent-light);
+        background: var(--accent-glow2);
+        border: 1px solid rgba(168, 85, 247, 0.12);
+        padding: 2px 7px;
+        border-radius: 2px;
+      }
+
+      /* Callout */
+      .callout {
+        display: flex;
+        gap: 14px;
+        padding: 18px 22px;
+        border-radius: var(--radius-lg);
+        margin: 20px 0;
+        font-size: 13.5px;
+        line-height: 1.7;
+      }
+      .callout.info {
+        background: rgba(168, 85, 247, 0.05);
+        border: 1px solid rgba(168, 85, 247, 0.18);
+        color: var(--text-dim);
+      }
+      .callout.warn {
+        background: rgba(245, 158, 11, 0.05);
+        border: 1px solid rgba(245, 158, 11, 0.18);
+        color: var(--text-dim);
+      }
+      .callout.success {
+        background: rgba(52, 211, 153, 0.05);
+        border: 1px solid rgba(52, 211, 153, 0.18);
+        color: var(--text-dim);
+      }
+      .callout-icon {
+        flex-shrink: 0;
+        margin-top: 1px;
+        font-size: 14px;
+      }
+      .callout.info .callout-icon {
+        color: var(--accent-light);
+      }
+      .callout.warn .callout-icon {
+        color: #f59e0b;
+      }
+      .callout.success .callout-icon {
+        color: #34d399;
+      }
+
+      /* Summary cards */
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin-top: 52px;
+      }
+      .summary-card {
+        background: var(--surface);
+        padding: 28px 24px;
+        text-align: center;
+        transition: background 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .summary-card:hover {
+        background: var(--surface2);
+      }
+      .summary-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(168, 85, 247, 0.04),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .summary-card:hover::before {
+        opacity: 1;
+      }
+      .summary-icon {
+        font-size: 24px;
+        margin-bottom: 12px;
+        display: block;
+      }
+      .summary-card h4 {
+        font-family: "Syne", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+      .summary-card p {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.6;
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* FAQ */
+      .faq-section {
+        margin-top: 64px;
+        padding-top: 52px;
+        border-top: 1px solid var(--border);
+      }
+      .faq-section h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 24px;
+        letter-spacing: -0.02em;
+      }
+      .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .faq-item {
+        border-bottom: 1px solid var(--border);
+      }
+      .faq-q {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 0;
+        font-family: "Syne", sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+        background: none;
+        border: none;
+        cursor: none;
+        text-align: left;
+        gap: 20px;
+        transition: color 0.2s;
+      }
+      .faq-q:hover {
+        color: var(--accent-light);
+      }
+      .faq-icon {
+        width: 22px;
+        height: 22px;
+        border: 1px solid var(--border2);
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 16px;
+        color: var(--text-muted);
+        transition: all 0.2s;
+      }
+      .faq-item.open .faq-icon {
+        border-color: var(--accent);
+        color: var(--accent-light);
+      }
+      .faq-a {
+        font-size: 14px;
+        color: var(--text-dim);
+        line-height: 1.75;
+        padding-bottom: 20px;
+        display: none;
+        max-width: 680px;
+      }
+      .faq-item.open .faq-a {
+        display: block;
+      }
+
+      .spacer {
+        height: 60px;
+      }
+
+      @media (max-width: 800px) {
+        .summary-grid {
+          grid-template-columns: 1fr;
+        }
+        .key-links {
+          flex-direction: column;
+        }
+        .key-step {
+          gap: 18px;
+        }
+        .step-marker {
+          width: 40px;
+          height: 40px;
+          font-size: 15px;
+        }
+        .key-steps::before {
+          left: 19px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <nav>
+      <a href="index.html" class="nav-logo"
+        ><div class="logo-mark"></div>
+        Xenon Hub</a
+      >
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="keysystem.html" class="active">Key System</a></li>
+        <li><a href="docs.html">Docs</a></li>
+        <li><a href="discord.html">Discord</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="docs.html" class="btn btn-ghost">Get Started</a>
+        <a href="pricing.html" class="btn btn-primary">Purchase</a>
+      </div>
+      <button class="nav-hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">home</a><span>/</span><span>key system</span>
+        </div>
+        <h1>Activate your<br /><span>key.</span></h1>
+        <p>
+          Xenon Hub uses a key system to give you access to all scripts. Follow
+          the steps below to obtain, configure, and activate your key. The
+          entire process takes less than two minutes.
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Fire Banner -->
+      <div class="fire-banner">
+        <div class="fire-banner-icon">🔥</div>
+        <div class="fire-banner-text">
+          You get access to ALL scripts — not just JJS
+          <span
+            >One key unlocks everything Xenon Hub has to offer across every
+            supported game.</span
+          >
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div class="key-steps">
+        <!-- STEP 1 -->
+        <div class="key-step">
+          <div class="step-marker">1</div>
+          <div class="step-content">
+            <h3>Obtain Your Key</h3>
+            <p>
+              Get your key from one of the links below. Each link uses a
+              different ad provider — pick whichever one works best for you.
+              Both lead to the same result: a valid Xenon Hub key with a
+              time-limited session.
+            </p>
+            <div class="key-links">
+              <a
+                href="https://ads.luarmor.net/get_key?for=JJS_6_Hours-OHrDCAoiiCnv"
+                target="_blank"
+                rel="noopener"
+                class="key-link"
+                id="linkvertise-link"
+              >
+                <div class="key-link-icon">
+                  <svg
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  >
+                    <path d="M6 3h7v7M13 3L6 10" />
+                  </svg>
+                </div>
+                <div class="key-link-meta">
+                  <span class="key-link-label">Linkvertise</span>
+                  <span class="key-link-sub">8 hour key session</span>
+                </div>
+              </a>
+              <a
+                href="https://ads.luarmor.net/get_key?for=Xenon_Hub_8_Hours_Workinc-PBAJonFecQpI"
+                target="_blank"
+                rel="noopener"
+                class="key-link"
+                id="workink-link"
+              >
+                <div class="key-link-icon">
+                  <svg
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  >
+                    <path d="M6 3h7v7M13 3L6 10" />
+                  </svg>
+                </div>
+                <div class="key-link-meta">
+                  <span class="key-link-label">Workink</span>
+                  <span class="key-link-sub">8 hour key session</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="key-step">
+          <div class="step-marker">2</div>
+          <div class="step-content">
+            <h3>Complete the Process</h3>
+            <p>
+              Follow through the steps on the ad page. Once you finish all the
+              required checkpoints, you will be automatically redirected back to
+              Luarmor where your key is displayed. Copy this key — you will need
+              it for the next step.
+            </p>
+            <div class="callout info">
+              <span class="callout-icon">&#9432;</span>
+              <div>
+                Make sure you do not close the page during the process. If you
+                get redirected to an unrelated page, go back and try the other
+                link provider instead.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="key-step">
+          <div class="step-marker">3</div>
+          <div class="step-content">
+            <h3>Configure the Script</h3>
+            <p>
+              Take the key you received and paste it into the script loader.
+              Find the line that says <code>script_key=""</code> and place your
+              key between the quotation marks. The script needs this to
+              authenticate you when it loads.
+            </p>
+
+            <div class="code-block">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot"></div>
+                  <div class="code-dot"></div>
+                  <div class="code-dot"></div>
+                </div>
+                <div class="code-filename">executor console</div>
+                <button class="copy-btn" id="copyExample">copy</button>
+              </div>
+              <div class="code-body">
+                <span class="cm">-- replace the key with your actual key</span><br />
+                <span class="fn">script_key</span>=<span class="st">"your-key-goes-here"</span>;<br />
+                <span class="fn">loadstring</span>(<span class="fn">game</span>:<span class="fn">HttpGet</span>(<span class="st">"https://api.luarmor.net/files/v3/loaders/eed1b8c86a83b71bf7e8ec398fc39401.lua"</span>))()<br /><br />
+                <span class="cm">-- example with a real key</span><br />
+                <span class="fn">script_key</span>=<span class="hl">"EXAMPLEXYZ123"</span>;<br />
+                <span class="fn">loadstring</span>(<span class="fn">game</span>:<span class="fn">HttpGet</span>(<span class="st">"https://api.luarmor.net/files/v3/loaders/eed1b8c86a83b71bf7e8ec398fc39401.lua"</span>))()
+              </div>
+            </div>
+
+            <div class="callout warn">
+              <span class="callout-icon">&#9888;</span>
+              <div>
+                The key goes <strong>before</strong> the loadstring line. If you
+                put it after, the script will not see it and authentication will
+                fail.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="key-step">
+          <div class="step-marker">4</div>
+          <div class="step-content">
+            <h3>Redeem & Activate</h3>
+            <p>
+              Head over to the Discord server and go to the
+              <strong>claim-key</strong> channel. Click the
+              <strong>Redeem Key</strong>
+              button and paste your key into the prompt. This activates your
+              session and links the key to your account. After that, execute the
+              full script and everything is ready to go.
+            </p>
+            <div class="key-links">
+              <a
+                href="https://discord.com/channels/1274036834787131432/1408230892438159481"
+                target="_blank"
+                rel="noopener"
+                class="key-link discord"
+                id="claim-key-link"
+              >
+                <div class="key-link-icon">
+                  <svg viewBox="0 0 16 16" fill="currentColor">
+                    <path
+                      d="M13.5 3.2A12.4 12.4 0 0 0 10.3 2a9 9 0 0 0-.4.8 11.5 11.5 0 0 0-3.8 0A9 9 0 0 0 5.7 2 12.4 12.4 0 0 0 2.5 3.2 13.6 13.6 0 0 0 .2 12.6a12.5 12.5 0 0 0 3.8 2 9.5 9.5 0 0 0 .8-1.3 7.8 7.8 0 0 1-1.3-.6l.3-.3a8.9 8.9 0 0 0 7.6 0l.3.3a8 8 0 0 1-1.3.6 9.5 9.5 0 0 0 .8 1.3 12.5 12.5 0 0 0 3.8-2A13.5 13.5 0 0 0 13.5 3.2ZM5.4 10.7a1.5 1.5 0 0 1-1.4-1.6 1.5 1.5 0 0 1 1.4-1.5 1.5 1.5 0 0 1 1.4 1.5 1.5 1.5 0 0 1-1.4 1.6Zm5.2 0a1.5 1.5 0 0 1-1.4-1.6 1.5 1.5 0 0 1 1.4-1.5 1.5 1.5 0 0 1 1.4 1.5 1.5 1.5 0 0 1-1.4 1.6Z"
+                    />
+                  </svg>
+                </div>
+                <div class="key-link-meta">
+                  <span class="key-link-label"
+                    >Open •〢🪙┃claim-key」 channel</span
+                  >
+                  <span class="key-link-sub">discord server</span>
+                </div>
+              </a>
+            </div>
+            <div class="callout success" style="margin-top: 16px">
+              <span class="callout-icon">✓</span>
+              <div>
+                Once redeemed, your key stays active for the duration shown.
+                After it expires, simply get a new key from the same links.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="summary-grid">
+        <div class="summary-card">
+          <span class="summary-icon">🔑</span>
+          <h4>Free Access</h4>
+          <p>
+            key system is completely free for all users and offers premium
+            features in JJS
+          </p>
+        </div>
+        <div class="summary-card">
+          <span class="summary-icon">⚡</span>
+          <h4>Quick Setup</h4>
+          <p>entire process takes under 2 minutes</p>
+        </div>
+        <div class="summary-card">
+          <span class="summary-icon">🎮</span>
+          <h4>All Scripts</h4>
+          <p>one key unlocks every supported game</p>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq-section">
+        <h2>Common Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-q">
+              How long does a key last?<span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              Both keys will last the same time, that is 8 hours. after the time
+              period you'll need to get a new key from the same links or renew
+              it.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Do I need a key for premium features?<span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              No, if you have purchased premium you won't need a key. You'll get
+              access to all the features automatically.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              My key says it is invalid — what do I do?<span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              Make sure you copied the full key with no extra spaces. If it
+              still does not work, your key may have expired. Get a fresh one
+              from the links above and try again. If the issue persists, ask in
+              the Discord server.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Where exactly do I put the key in the script?<span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              On the very first line, before the loadstring call. It should look
+              like
+              <code>script_key="yourkey";</code> followed by the loadstring on
+              the next line. The script reads the variable before it runs.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Can I use the same key on multiple accounts?<span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              Yes, you can use the same key on multiple accounts, but not
+              multiple devices. if you ever change devices youll need a Hardware
+              ID (HWID) reset from the discord server.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+    </div>
+
+    <footer>
+      <div class="container">
+        <div class="footer-inner">
+          <a href="index.html" class="nav-logo"
+            ><div class="logo-mark" style="width: 18px; height: 18px"></div>
+            Xenon Hub</a
+          >
+          <ul class="footer-links">
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="keysystem.html">Key System</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="discord.html">Discord</a></li>
+          </ul>
+          <div class="footer-copy">xenon hub // key system</div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile hamburger menu toggle
+      document.querySelector('.nav-hamburger').addEventListener('click', function() {
+        this.closest('nav').classList.toggle('nav-open');
+      });
+      document.querySelectorAll('.nav-links a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          document.querySelector('nav').classList.remove('nav-open');
+        });
+      });
+
+      const cursor = document.getElementById("cursor");
+      const ring = document.getElementById("cursorRing");
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+      });
+      (function loop() {
+        cursor.style.left = mx + "px";
+        cursor.style.top = my + "px";
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+        requestAnimationFrame(loop);
+      })();
+
+      // Copy example code
+      document
+        .getElementById("copyExample")
+        .addEventListener("click", function () {
+          navigator.clipboard
+            .writeText(
+              'script_key="your-key-goes-here";\nloadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/eed1b8c86a83b71bf7e8ec398fc39401.lua"))()',
+            )
+            .catch(() => {});
+          this.textContent = "copied!";
+          this.style.color = "var(--accent-light)";
+          setTimeout(() => {
+            this.textContent = "copy";
+            this.style.color = "";
+          }, 2000);
+        });
+
+      // FAQ toggle
+      document.querySelectorAll(".faq-q").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const item = this.closest(".faq-item");
+          const isOpen = item.classList.contains("open");
+          document.querySelectorAll(".faq-item").forEach((i) => {
+            i.classList.remove("open");
+            i.querySelector(".faq-icon").textContent = "+";
+          });
+          if (!isOpen) {
+            item.classList.add("open");
+            this.querySelector(".faq-icon").textContent = "\u2212";
+          }
+        });
+      });
+
+      // Scroll animations
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.style.opacity = "1";
+              e.target.style.transform = "translateY(0)";
+            }
+          });
+        },
+        { threshold: 0.05 },
+      );
+      document
+        .querySelectorAll(".key-step, .summary-card, .faq-item")
+        .forEach((el) => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(16px)";
+          el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+          obs.observe(el);
+        });
+    </script>
+  </body>
+</html>
