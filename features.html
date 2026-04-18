@@ -84,7 +84,14 @@
         border-radius: 0;
         cursor: none;
         transition: all 0.25s;
-        clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+        clip-path: polygon(
+          0 0,
+          calc(100% - 6px) 0,
+          100% 6px,
+          100% 100%,
+          6px 100%,
+          0 calc(100% - 6px)
+        );
       }
       .filter-btn:hover,
       .filter-btn.active {
@@ -293,6 +300,151 @@
         color: var(--text-muted);
       }
 
+      /* --- Modern UI Additions --- */
+      .nav-modern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 52px;
+        z-index: 300;
+        pointer-events: none;
+      }
+      .nav-modern > * {
+        pointer-events: auto;
+      }
+
+      .dashboard-btn {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(6, 4, 10, 0.6);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(168, 85, 247, 0.25);
+        color: var(--text);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        padding: 10px 28px;
+        border-radius: 40px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+      .dashboard-btn:hover {
+        background: rgba(168, 85, 247, 0.15);
+        border-color: rgba(168, 85, 247, 0.5);
+        box-shadow: 0 0 24px rgba(168, 85, 247, 0.3);
+        color: #fff;
+      }
+
+      .menu-trigger {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: none;
+        border: none;
+        cursor: none;
+        width: 40px;
+        align-items: flex-end;
+        z-index: 301;
+      }
+      .menu-trigger span {
+        display: block;
+        height: 2px;
+        background: var(--text);
+        border-radius: 2px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .menu-trigger span:nth-child(1) {
+        width: 30px;
+      }
+      .menu-trigger span:nth-child(2) {
+        width: 22px;
+      }
+      .menu-trigger span:nth-child(3) {
+        width: 30px;
+      }
+      .menu-trigger:hover span {
+        width: 30px;
+        background: var(--accent-light);
+      }
+
+      .menu-trigger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+        width: 30px;
+      }
+      .menu-trigger.active span:nth-child(2) {
+        opacity: 0;
+      }
+      .menu-trigger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+        width: 30px;
+      }
+
+      .fullscreen-menu {
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 4, 10, 0.85);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        z-index: 200;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .fullscreen-menu.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .menu-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+        transform: translateY(40px);
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .fullscreen-menu.active .menu-inner {
+        transform: translateY(0);
+      }
+      .menu-inner a {
+        font-family: "Syne", sans-serif;
+        font-size: 52px;
+        font-weight: 800;
+        color: var(--text-dim);
+        text-decoration: none;
+        letter-spacing: -0.02em;
+        transition: all 0.3s;
+      }
+      .menu-inner a:hover {
+        color: var(--text);
+        transform: scale(1.05);
+        text-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+      }
+
+      /* Mobile Checks for Navigation */
+      @media (max-width: 800px) {
+        .nav-modern {
+          padding: 0 24px;
+        }
+        .dashboard-btn {
+          display: none;
+        }
+        .menu-inner a {
+          font-size: 34px;
+        }
+      }
+
       @media (max-width: 800px) {
         .feat-list {
           grid-template-columns: 1fr;
@@ -304,27 +456,29 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-ring" id="cursorRing"></div>
 
-    <nav>
-      <a href="index.html" class="nav-logo"
-        ><div class="logo-mark"></div>
-        Xenon Hub</a
-      >
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="features.html" class="active">Features</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="keysystem.html">Key System</a></li>
-        <li><a href="docs.html">Docs</a></li>
-        <li><a href="discord.html">Discord</a></li>
-      </ul>
-      <div class="nav-cta">
-        <a href="docs.html" class="btn btn-ghost">Get Started</a>
-        <a href="pricing.html" class="btn btn-primary">Purchase</a>
-      </div>
-      <button class="nav-hamburger" aria-label="Menu">
+    <nav class="nav-modern">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-mark"></div>
+        Xenon Hub
+      </a>
+
+      <a href="dashboard.html" class="dashboard-btn">Dashboard</a>
+
+      <button class="menu-trigger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
     </nav>
+
+    <div class="fullscreen-menu" id="fsMenu">
+      <div class="menu-inner">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="keysystem.html">Key System</a>
+        <a href="docs.html">Docs</a>
+        <a href="discord.html">Discord</a>
+      </div>
+    </div>
 
     <div class="page-hero">
       <div class="container">
@@ -1192,14 +1346,25 @@
       </div>
     </footer>
 
+    <script src="smooth-scroll.js"></script>
     <script>
-      // Mobile hamburger menu toggle
-      document.querySelector('.nav-hamburger').addEventListener('click', function() {
-        this.closest('nav').classList.toggle('nav-open');
+      // Modern full screen menu toggle
+      const menuTrigger = document.querySelector(".menu-trigger");
+      const fsMenu = document.getElementById("fsMenu");
+      menuTrigger.addEventListener("click", function () {
+        this.classList.toggle("active");
+        fsMenu.classList.toggle("active");
+        if (fsMenu.classList.contains("active")) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
       });
-      document.querySelectorAll('.nav-links a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          document.querySelector('nav').classList.remove('nav-open');
+      document.querySelectorAll(".menu-inner a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menuTrigger.classList.remove("active");
+          fsMenu.classList.remove("active");
+          document.body.style.overflow = "";
         });
       });
 
