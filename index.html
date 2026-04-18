@@ -528,78 +528,352 @@
           display: none;
         }
       }
+
+      /* --- Modern UI Additions --- */
+      .nav-modern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 52px;
+        z-index: 300;
+        pointer-events: none;
+      }
+      .nav-modern > * {
+        pointer-events: auto;
+      }
+
+      .dashboard-btn {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(6, 4, 10, 0.6);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(168, 85, 247, 0.25);
+        color: var(--text);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        padding: 10px 28px;
+        border-radius: 40px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+      .dashboard-btn:hover {
+        background: rgba(168, 85, 247, 0.15);
+        border-color: rgba(168, 85, 247, 0.5);
+        box-shadow: 0 0 24px rgba(168, 85, 247, 0.3);
+        color: #fff;
+      }
+
+      .menu-trigger {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: none;
+        border: none;
+        cursor: none;
+        width: 40px;
+        align-items: flex-end;
+        z-index: 301;
+      }
+      .menu-trigger span {
+        display: block;
+        height: 2px;
+        background: var(--text);
+        border-radius: 2px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .menu-trigger span:nth-child(1) {
+        width: 30px;
+      }
+      .menu-trigger span:nth-child(2) {
+        width: 22px;
+      }
+      .menu-trigger span:nth-child(3) {
+        width: 30px;
+      }
+      .menu-trigger:hover span {
+        width: 30px;
+        background: var(--accent-light);
+      }
+
+      .menu-trigger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+        width: 30px;
+      }
+      .menu-trigger.active span:nth-child(2) {
+        opacity: 0;
+      }
+      .menu-trigger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+        width: 30px;
+      }
+
+      .fullscreen-menu {
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 4, 10, 0.85);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        z-index: 200;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .fullscreen-menu.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .menu-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+        transform: translateY(40px);
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .fullscreen-menu.active .menu-inner {
+        transform: translateY(0);
+      }
+      .menu-inner a {
+        font-family: "Syne", sans-serif;
+        font-size: 52px;
+        font-weight: 800;
+        color: var(--text-dim);
+        text-decoration: none;
+        letter-spacing: -0.02em;
+        transition: all 0.3s;
+      }
+      .menu-inner a:hover {
+        color: var(--text);
+        transform: scale(1.05);
+        text-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+      }
+
+      /* Mobile Checks for Navigation */
+      @media (max-width: 800px) {
+        .nav-modern {
+          padding: 0 24px;
+        }
+        .dashboard-btn {
+          display: none;
+        }
+        .menu-inner a {
+          font-size: 34px;
+        }
+      }
+
+      .hero-modern {
+        position: relative;
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
+        gap: 60px;
+        padding: 50px 52px;
+        max-width: 1400px;
+        margin: 0 auto;
+        overflow: hidden;
+        z-index: 10;
+      }
+      .hero-bg-lights {
+        position: absolute;
+        top: 50%;
+        left: 30%;
+        transform: translate(-50%, -50%);
+        width: 120vh;
+        height: 120vh;
+        background: radial-gradient(
+          circle,
+          rgba(16, 185, 129, 0.04) 0%,
+          transparent 60%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .hero-modern-content {
+        position: relative;
+        z-index: 15;
+        padding-right: 20px;
+        margin-top: 40px;
+      }
+      .hero-modern-content h1 {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: clamp(50px, 6vw, 88px);
+        line-height: 0.96;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        margin-bottom: 24px;
+      }
+      .hero-modern-content h1 .accent {
+        color: var(--accent);
+        display: block;
+      }
+      .hero-modern-content .hero-desc {
+        font-size: 16px;
+        color: var(--text-dim);
+        line-height: 1.8;
+        margin-bottom: 40px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        max-width: 520px;
+      }
+      .hero-modern-actions {
+        display: flex;
+        gap: 16px;
+      }
+
+      .hero-3d-composer {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        perspective: 1200px;
+        margin-top: 60px;
+      }
+      .hero-script-label {
+        font-family: "Syne", sans-serif;
+        color: var(--accent-light);
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        margin-bottom: 40px;
+        z-index: 12;
+        text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+      }
+
+      .script-wrapper {
+        position: relative;
+        z-index: 11;
+        width: 100%;
+        max-width: 580px;
+        transform-style: preserve-3d;
+        animation: float3d 8s ease-in-out infinite;
+      }
+      @keyframes float3d {
+        0%,
+        100% {
+          transform: rotateX(8deg) rotateY(-14deg) rotateZ(3deg) translateY(0);
+        }
+        50% {
+          transform: rotateX(4deg) rotateY(-8deg) rotateZ(1deg)
+            translateY(-24px);
+        }
+      }
+      .script-img {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow:
+          0 40px 100px -20px rgba(0, 0, 0, 0.9),
+          0 0 80px rgba(16, 185, 129, 0.15),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      }
+
+      @media (max-width: 1024px) {
+        .hero-modern {
+          grid-template-columns: 1fr;
+          text-align: center;
+          padding: 140px 20px 60px;
+          gap: 40px;
+        }
+        .hero-modern-content {
+          padding-right: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .hero-modern-actions {
+          justify-content: center;
+        }
+        .script-wrapper {
+          max-width: 480px;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="cursor" id="cursor"></div>
     <div class="cursor-ring" id="cursorRing"></div>
 
-    <nav>
+    <nav class="nav-modern">
       <a href="index.html" class="nav-logo">
         <div class="logo-mark"></div>
         Xenon Hub
       </a>
-      <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="features.html">Features</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="keysystem.html">Key System</a></li>
-        <li><a href="docs.html">Docs</a></li>
-        <li><a href="discord.html">Discord</a></li>
-      </ul>
-      <div class="nav-cta">
-        <a href="docs.html" class="btn btn-ghost">Get Started</a>
-        <a href="pricing.html" class="btn btn-primary">Purchase</a>
-      </div>
-      <button class="nav-hamburger" aria-label="Menu">
+
+
+
+      <button class="menu-trigger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
     </nav>
 
-    <section class="hero">
-      <div class="hero-glow"></div>
-      <div class="container">
-        <div class="hero-content">
-          <div class="hero-eyebrow animate-fade-up">
-            <div class="tag">Jujutsu Shenanigans</div>
-            <div class="hero-eyebrow-line"></div>
-          </div>
-          <h1 class="animate-fade-up delay-1">
-            The Best
-            <span class="accent">Xenon</span>
-          </h1>
-          <p class="hero-desc animate-fade-up delay-2">
-            Xenon Hub is a Jujutsu Shenanigans combat script with auto block,
-            lock on, black flash chaining, character specific automation, and a
-            full combo system. Everything you need, in one place.
-          </p>
-          <div class="hero-actions animate-fade-up delay-3">
-            <a href="pricing.html" class="btn btn-primary btn-large"
-              >Get Access</a
-            >
-            <a href="features.html" class="btn btn-ghost btn-large"
-              >View Features</a
-            >
-          </div>
-          <div class="hero-stats animate-fade-up delay-4">
-            <div class="hero-stat">
-              <div class="hero-stat-num">70<span>+</span></div>
-              <div class="hero-stat-label">features</div>
-            </div>
-            <div class="hero-stat">
-              <div class="hero-stat-num">10<span>+</span></div>
-              <div class="hero-stat-label">characters</div>
-            </div>
-            <div class="hero-stat">
-              <div class="hero-stat-num">JJS</div>
-              <div class="hero-stat-label">4.0.0</div>
-            </div>
-          </div>
+    <div class="fullscreen-menu" id="fsMenu">
+      <div class="menu-inner">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="keysystem.html">Key System</a>
+        <a href="docs.html">Docs</a>
+        <a href="discord.html">Discord</a>
+      </div>
+    </div>
+
+    <section class="hero-modern" id="hero">
+      <div class="hero-bg-lights"></div>
+
+      <div class="hero-modern-content">
+        <div class="hero-eyebrow animate-fade-up">
+          <div class="tag">Jujutsu Shenanigans</div>
+          <div class="hero-eyebrow-line"></div>
+        </div>
+        <h1 class="animate-fade-up delay-1">
+          The Best
+          <span class="accent">Xenon</span>
+        </h1>
+        <p class="hero-desc animate-fade-up delay-2">
+          Xenon Hub is an advanced combat script with auto block, lock on, black
+          flash chaining, character specific automation, and a full combo
+          system. Everything you need, flawlessly executed.
+        </p>
+        <div class="hero-modern-actions animate-fade-up delay-3">
+          <a href="pricing.html" class="btn btn-primary btn-large"
+            >Purchase Premium</a
+          >
+          <a href="docs.html" class="btn btn-ghost btn-large">Explore Setup</a>
         </div>
       </div>
-      <div class="scroll-indicator">
+
+      <div class="hero-3d-composer animate-fade-up delay-4">
+        <div class="hero-script-label">Xenon Hub</div>
+        <div class="script-wrapper">
+          <img src="script.png" alt="Xenon UI" class="script-img" />
+        </div>
+      </div>
+
+      <div
+        class="scroll-indicator"
+        style="bottom: 30px; left: 52px; z-index: 20"
+      >
         <div class="scroll-line"></div>
-        <span>scroll</span>
+        <span>explore</span>
       </div>
     </section>
 
@@ -821,11 +1095,11 @@
           </div>
           <div class="compat-item">
             <div class="compat-dot"></div>
-            Astroid
+            Seliware
           </div>
           <div class="compat-item">
             <div class="compat-dot"></div>
-            Velocity
+            Madium
           </div>
           <div class="compat-item">
             <div class="compat-dot"></div>
@@ -908,16 +1182,25 @@
       </div>
     </footer>
 
+    <script src="smooth-scroll.js"></script>
     <script>
-      // Mobile hamburger menu toggle
-      document
-        .querySelector(".nav-hamburger")
-        .addEventListener("click", function () {
-          this.closest("nav").classList.toggle("nav-open");
-        });
-      document.querySelectorAll(".nav-links a").forEach(function (link) {
-        link.addEventListener("click", function () {
-          document.querySelector("nav").classList.remove("nav-open");
+      // Modern full screen menu toggle
+      const menuTrigger = document.querySelector(".menu-trigger");
+      const fsMenu = document.getElementById("fsMenu");
+      menuTrigger.addEventListener("click", function () {
+        this.classList.toggle("active");
+        fsMenu.classList.toggle("active");
+        if (fsMenu.classList.contains("active")) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+      });
+      document.querySelectorAll(".menu-inner a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menuTrigger.classList.remove("active");
+          fsMenu.classList.remove("active");
+          document.body.style.overflow = "";
         });
       });
 
