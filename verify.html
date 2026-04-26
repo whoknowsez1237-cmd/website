@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xenon Scripts — Verification</title>
+    <meta
+      name="description"
+      content="Verify your Discord account to access the Xenon Scripts server."
+    />
+    <link rel="icon" type="image/png" href="logo2.png" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      /* ─── Verification Page Specific Styles ─── */
+      .verify-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .verify-card {
+        width: 100%;
+        max-width: 560px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        position: relative;
+        animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      .verify-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(88, 101, 242, 0.6),
+          transparent
+        );
+      }
+
+      .verify-header {
+        padding: 36px 36px 0;
+        text-align: center;
+      }
+
+      .verify-shield {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 20px;
+        background: linear-gradient(
+          135deg,
+          rgba(88, 101, 242, 0.15),
+          rgba(88, 101, 242, 0.3)
+        );
+        border: 1px solid rgba(88, 101, 242, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        animation: pulse 3s ease-in-out infinite;
+      }
+
+      .verify-title {
+        font-family: "Syne", sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+      }
+
+      .verify-subtitle {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-bottom: 0;
+      }
+
+      .verify-body {
+        padding: 28px 36px;
+      }
+
+      .verify-steps {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 24px;
+      }
+      .verify-steps li {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 13.5px;
+        color: var(--text-dim);
+        line-height: 1.6;
+      }
+      .verify-steps li:last-child {
+        border-bottom: none;
+      }
+      .step-num {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        background: rgba(88, 101, 242, 0.1);
+        border: 1px solid rgba(88, 101, 242, 0.25);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        font-weight: 600;
+        color: #818cf8;
+        margin-top: 2px;
+      }
+
+      .legal-box {
+        background: var(--surface2);
+        border: 1px solid var(--border2);
+        border-radius: var(--radius);
+        padding: 18px 20px;
+        margin-bottom: 24px;
+        max-height: 180px;
+        overflow-y: auto;
+      }
+      .legal-box h4 {
+        font-family: "Syne", sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .legal-box p {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.75;
+        margin-bottom: 8px;
+      }
+      .legal-box p:last-child {
+        margin-bottom: 0;
+      }
+      .legal-box ul {
+        padding-left: 18px;
+        margin: 6px 0;
+      }
+      .legal-box ul li {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.75;
+        padding: 0;
+        border: none;
+        display: list-item;
+      }
+
+      .consent-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .consent-check input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #5865f2;
+        cursor: pointer;
+      }
+      .consent-check label {
+        font-size: 13px;
+        color: var(--text-dim);
+        cursor: pointer;
+      }
+
+      .verify-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 14px 24px;
+        background: linear-gradient(
+          135deg,
+          rgba(88, 101, 242, 0.2),
+          rgba(88, 101, 242, 0.4)
+        );
+        color: #a5b4fc;
+        border: 1px solid rgba(88, 101, 242, 0.4);
+        border-radius: var(--radius);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .verify-btn:hover:not(:disabled) {
+        background: linear-gradient(
+          135deg,
+          rgba(88, 101, 242, 0.35),
+          rgba(88, 101, 242, 0.55)
+        );
+        box-shadow:
+          0 0 30px rgba(88, 101, 242, 0.3),
+          0 0 60px rgba(88, 101, 242, 0.1);
+        border-color: rgba(88, 101, 242, 0.7);
+        transform: translateY(-1px);
+        color: #c7d2fe;
+      }
+      .verify-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .verify-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .verify-footer {
+        padding: 16px 36px 24px;
+        text-align: center;
+      }
+      .verify-footer p {
+        font-size: 11px;
+        color: var(--text-muted);
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: 0.03em;
+      }
+
+      /* ─── State: Success ─── */
+      .state-success .verify-shield {
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.15),
+          rgba(16, 185, 129, 0.3)
+        );
+        border-color: rgba(16, 185, 129, 0.4);
+      }
+      .state-success .verify-card::before {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(16, 185, 129, 0.6),
+          transparent
+        );
+      }
+
+      .success-msg {
+        text-align: center;
+        padding: 20px 0;
+      }
+      .success-msg h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #34d399;
+        margin-bottom: 10px;
+      }
+      .success-msg p {
+        font-size: 14px;
+        color: var(--text-dim);
+        line-height: 1.7;
+      }
+
+      /* ─── State: Error ─── */
+      .state-error .verify-shield {
+        background: linear-gradient(
+          135deg,
+          rgba(239, 68, 68, 0.15),
+          rgba(239, 68, 68, 0.3)
+        );
+        border-color: rgba(239, 68, 68, 0.4);
+      }
+      .state-error .verify-card::before {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(239, 68, 68, 0.6),
+          transparent
+        );
+      }
+
+      .error-msg {
+        text-align: center;
+        padding: 20px 0;
+      }
+      .error-msg h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #f87171;
+        margin-bottom: 10px;
+      }
+      .error-msg p {
+        font-size: 14px;
+        color: var(--text-dim);
+        line-height: 1.7;
+      }
+      .error-reason {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 6px 14px;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: var(--radius);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: #fca5a5;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 16px;
+        font-size: 13px;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .back-link:hover {
+        color: var(--accent-light);
+      }
+
+      /* ─── State: No Params (direct visit) ─── */
+      .state-idle .verify-shield {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.05),
+          rgba(255, 255, 255, 0.1)
+        );
+        border-color: var(--border2);
+      }
+
+      /* ─── Loading spinner ─── */
+      .spinner {
+        width: 24px;
+        height: 24px;
+        border: 2px solid rgba(88, 101, 242, 0.2);
+        border-top-color: #5865f2;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ─── Checkmark animation ─── */
+      @keyframes checkPop {
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .check-anim {
+        animation: checkPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Custom cursor (matches Xenon site) -->
+    <div class="cursor"></div>
+    <div class="cursor-ring"></div>
+
+    <main class="verify-page" id="verify-page">
+      <!-- Content is injected by JavaScript based on URL state -->
+    </main>
+
+    <!-- Cursor script (from Xenon) -->
+    <script>
+      const cursor = document.querySelector(".cursor");
+      const ring = document.querySelector(".cursor-ring");
+      if (cursor && ring) {
+        document.addEventListener("mousemove", (e) => {
+          cursor.style.left = e.clientX + "px";
+          cursor.style.top = e.clientY + "px";
+          ring.style.left = e.clientX + "px";
+          ring.style.top = e.clientY + "px";
+        });
+      }
+    </script>
+
+    <script>
+      // ═══════════════════════════════════════════
+      //  CONFIGURATION — Update these values!
+      // ═══════════════════════════════════════════
+      const params = new URLSearchParams(window.location.search);
+      const state = params.get("state");
+      const status = params.get("status");
+      const reason = params.get("reason");
+
+      const CONFIG = {
+        // Dynamically pull from URL params passed by the bot
+        CLIENT_ID: params.get("client_id") || "YOUR_CLIENT_ID_HERE",
+        REDIRECT_URI: params.get("redirect_uri") || "YOUR_REDIRECT_URI_HERE",
+        SCOPES: "identify",
+      };
+      const page = document.getElementById("verify-page");
+
+      function buildOAuthURL(state) {
+        const url = new URL("https://discord.com/api/oauth2/authorize");
+        url.searchParams.set("client_id", CONFIG.CLIENT_ID);
+        url.searchParams.set("redirect_uri", CONFIG.REDIRECT_URI);
+        url.searchParams.set("response_type", "code");
+        url.searchParams.set("scope", CONFIG.SCOPES);
+        url.searchParams.set("state", state);
+        url.searchParams.set("prompt", "consent");
+        return url.toString();
+      }
+
+      function getErrorMessage(reason) {
+        const messages = {
+          cancelled:
+            "You cancelled the authorization or closed the page before completing.",
+          expired:
+            "Your verification link has expired. Please click the Verify button in Discord again.",
+          account_too_new:
+            "Your Discord account is less than 3 days old. Please try again later once your account meets the minimum age requirement.",
+          user_mismatch:
+            "The Discord account you authorized with doesn't match the one that clicked Verify. Please try again using the same account.",
+          token_failed: "Failed to communicate with Discord. Please try again.",
+          server_error:
+            "An internal server error occurred. Please try again later.",
+          not_in_server:
+            "You don't appear to be in the server. Please join the server first, then verify.",
+        };
+        return (
+          messages[reason] || "An unknown error occurred. Please try again."
+        );
+      }
+
+      // ─── Render based on state ───
+
+      if (status === "success") {
+        // ── SUCCESS STATE ──
+        page.innerHTML = `
+          <div class="verify-card state-success">
+            <div class="verify-header">
+              <div class="verify-shield check-anim">✅</div>
+              <h1 class="verify-title">Verified!</h1>
+              <p class="verify-subtitle">Your identity has been confirmed.</p>
+            </div>
+            <div class="verify-body">
+              <div class="success-msg">
+                <h3>Welcome to the server!</h3>
+                <p>You've been granted full access. You can return to Discord now.</p>
+                <br/>
+                <a href="https://discord.gg/xenonscripts" class="verify-btn" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.4)); color: #34d399; border-color: rgba(16, 185, 129, 0.4); text-decoration: none;">← Return to Discord</a>
+              </div>
+            </div>
+            <div class="verify-footer">
+              <p>You may now close this tab.</p>
+            </div>
+          </div>
+        `;
+      } else if (status === "error") {
+        // ── ERROR STATE ──
+        page.innerHTML = `
+          <div class="verify-card state-error">
+            <div class="verify-header">
+              <div class="verify-shield check-anim">❌</div>
+              <h1 class="verify-title">Verification Failed</h1>
+              <p class="verify-subtitle">We couldn't complete your verification.</p>
+            </div>
+            <div class="verify-body">
+              <div class="error-msg">
+                <p>${getErrorMessage(reason)}</p>
+                <span class="error-reason">${reason || "unknown"}</span>
+                <br/>
+                <a href="https://discordapp.com/channels/1274036834787131432/1483520386988511233" class="back-link">← Return to Discord and try again</a>
+              </div>
+            </div>
+            <div class="verify-footer">
+              <p>If this issue persists, contact a server moderator.</p>
+            </div>
+          </div>
+        `;
+      } else if (state) {
+        // ── VERIFY STATE (has a valid state param) ──
+        const oauthURL = buildOAuthURL(state);
+        page.innerHTML = `
+          <div class="verify-card">
+            <div class="verify-header">
+              <div class="verify-shield">🛡️</div>
+              <h1 class="verify-title">Server Verification</h1>
+              <p class="verify-subtitle">Confirm your identity to access Xenon Scripts</p>
+            </div>
+            <div class="verify-body">
+              <ul class="verify-steps">
+                <li>
+                  <span class="step-num">1</span>
+                  <span>Click <strong>"Verify with Discord"</strong> below to authorize.</span>
+                </li>
+                <li>
+                  <span class="step-num">2</span>
+                  <span>Discord will ask you to confirm. We only request your <strong>basic identity</strong> (user ID and account age).</span>
+                </li>
+                <li>
+                  <span class="step-num">3</span>
+                  <span>If your account meets our requirements, you'll be <strong>automatically verified</strong> and granted access.</span>
+                </li>
+              </ul>
+
+              <div class="legal-box">
+                <h4>📜 Terms & Consent</h4>
+                <p>By clicking "Verify with Discord" you acknowledge and agree to the following:</p>
+                <ul>
+                  <li>We will access your <strong>Discord user ID</strong>, <strong>username</strong>, and <strong>account creation date</strong> solely for verification purposes.</li>
+                  <li>Your data will be stored securely to prevent re-verification. We do <strong>not</strong> store your email, password, or access token.</li>
+                  <li>Accounts less than <strong>3 days old</strong> will be denied access to protect the community from alt accounts and raids.</li>
+                  <li>You may request removal of your stored verification data by contacting a server administrator.</li>
+                  <li>This verification is governed by <a href="https://discord.com/terms" target="_blank" style="color: #818cf8;">Discord's Terms of Service</a> and our server rules.</li>
+                </ul>
+                <p>We take your privacy seriously. No data is shared with third parties.</p>
+              </div>
+
+              <div class="consent-check">
+                <input type="checkbox" id="consent-cb" />
+                <label for="consent-cb">I have read and agree to the terms above.</label>
+              </div>
+
+              <a href="${oauthURL}" id="verify-link" class="verify-btn" style="pointer-events: none;" onclick="return document.getElementById('consent-cb').checked;">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+                Verify with Discord
+              </a>
+            </div>
+            <div class="verify-footer">
+              <p>🔒 Your link is unique and expires in 10 minutes</p>
+            </div>
+          </div>
+        `;
+
+        // ── Enable/disable button based on checkbox ──
+        const cb = document.getElementById("consent-cb");
+        const btn = document.getElementById("verify-link");
+        cb.addEventListener("change", () => {
+          if (cb.checked) {
+            btn.style.pointerEvents = "auto";
+            btn.removeAttribute("disabled");
+            btn.style.opacity = "1";
+          } else {
+            btn.style.pointerEvents = "none";
+            btn.setAttribute("disabled", "");
+            btn.style.opacity = "0.4";
+          }
+        });
+        // Initial disabled state
+        btn.style.opacity = "0.4";
+      } else {
+        // ── IDLE STATE (no params — direct visit) ──
+        page.innerHTML = `
+          <div class="verify-card state-idle">
+            <div class="verify-header">
+              <div class="verify-shield">🔒</div>
+              <h1 class="verify-title">Verification Portal</h1>
+              <p class="verify-subtitle">This page is accessed via Discord.</p>
+            </div>
+            <div class="verify-body">
+              <div class="error-msg">
+                <p>To verify, go to the <strong>Xenon Scripts Discord server</strong> and click the <strong>Verify</strong> button in the verification channel.</p>
+                <br/>
+                <a href="https://discordapp.com/channels/1274036834787131432/1483520386988511233" class="back-link">← Go to Discord</a>
+              </div>
+            </div>
+            <div class="verify-footer">
+              <p>Xenon Scripts — Gatekeeper Verification</p>
+            </div>
+          </div>
+        `;
+      }
+    </script>
+  </body>
+</html>
